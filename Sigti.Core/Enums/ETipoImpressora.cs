@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace Sigti.Core.Enums
 {
-    public enum ETipoConexaoImpressora
-    {
-        REDE,USB
-    }
     public enum ETipoImpressora
     {
         LASER,TINTA,TERMICA
