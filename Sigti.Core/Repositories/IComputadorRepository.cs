@@ -8,5 +8,9 @@ using System.Threading.Tasks;
 
 namespace Sigti.Core.Repositories
 {
-    public interface IComputadorRepository:IGenericRepository<Computador> { }
+    public interface IComputadorRepository
+    {
+        Task AdicionarAsync(Computador computador);
+        Task AtualizarAsync(Computador computador);
+    }
 }
