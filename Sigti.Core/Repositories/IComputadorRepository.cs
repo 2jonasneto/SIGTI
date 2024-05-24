@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace Sigti.Core.Repositories
 {
-    public interface IComputadorRepository:IRepository<Computador> { }
+    public interface IComputadorRepository:IGenericRepository<Computador> { }
 }

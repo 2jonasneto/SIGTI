@@ -3,5 +3,5 @@ using Sigti.Core.Interfaces;
 
 namespace Sigti.Core.Repositories
 {
-    public interface ILocaizacaoRepository:IRepository<Localizacao> { }
+    public interface ILocaizacaoRepository:IGenericRepository<Localizacao> { }
 }

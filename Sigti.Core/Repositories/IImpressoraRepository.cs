@@ -3,5 +3,5 @@ using Sigti.Core.Interfaces;
 
 namespace Sigti.Core.Repositories
 {
-    public interface IImpressoraRepository:IRepository<Impressora> { }
+    public interface IImpressoraRepository:IGenericRepository<Impressora> { }
 }

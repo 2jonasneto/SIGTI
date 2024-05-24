@@ -3,5 +3,5 @@ using Sigti.Core.Interfaces;
 
 namespace Sigti.Core.Repositories
 {
-    public interface ISetorRepository:IRepository<Setor> { }
+    public interface ISetorRepository:IGenericRepository<Setor> { }
 }

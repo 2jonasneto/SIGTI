@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sigti.Core.Interfaces
 {
-    public interface IRepository<T> where T : Entity
+    public interface IGenericRepository<T> where T : Entity
     {
         Task CreateAsync(T entity);
         Task UpdateAsync(T entity);
