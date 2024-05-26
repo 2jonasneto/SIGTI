@@ -3,25 +3,13 @@ using Sigti.Core.Entities;
 using Sigti.Core.Repositories;
 using Sigti.Data.Base;
 using Sigti.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sigti.Core.Interfaces
 {
-    public interface IUnitForWork
-    {//Define the Specific Repositories
-        ComputadorRepository Computadores { get; }
-        void CreateTransaction();
-        void Commit();
-        void Rollback();
-        Task Save();
-    }
     public class UnitForWork : IUnitForWork
     {
-        public ComputadorRepository Computadores { get; private set; }
+        public IComputadorRepository Computadores { get; private set; }
+        public IImpressoraRepository Impressoras { get; private set; }
         private readonly SigtiContext _context;
         private IDbContextTransaction? transaction = null;
         public UnitForWork(SigtiContext context)
@@ -29,6 +17,7 @@ namespace Sigti.Core.Interfaces
             _context = context;
 
             Computadores = new ComputadorRepository(new GenericRepository<Computador>(_context));
+            Impressoras = new ImpressoraRepository(new GenericRepository<Impressora>(_context));
 
         }
 
