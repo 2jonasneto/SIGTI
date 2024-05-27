@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Flunt.Notifications;
 using Sigti.Application.Base;
 using Sigti.Application.Interfaces;
 using Sigti.Core.Entities;
@@ -12,24 +13,30 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.Handlers
 {
-    public class ComputadorCommandHandler : ICommandHandler<AdicionarComputadorCommand>, ICommandHandler<AtualizarComputadorCommand>
+    public class ComputadorCommandHandler : Notifiable<Notification>, ICommandHandler<AdicionarComputadorCommand>, ICommandHandler<AtualizarComputadorCommand>
     {
-        private readonly IMapper mapper;
-        private readonly IUnitForWork data;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _data;
 
-        public ComputadorCommandHandler(IMapper mapper)
+        public ComputadorCommandHandler(IMapper mapper, IUnitOfWork data)
         {
-            this.mapper = mapper;
+            _mapper = mapper;
+            _data = data;
         }
 
         public async Task<ICommandResult> Execute(AdicionarComputadorCommand command)
         {
             try
             {
-                var results = new List<(bool, string)>();
-                results.Add(await data.CreateTransaction());
 
-                var pc = mapper.Map<Computador>(command);
+                /*c.Validate();
+                if (c.IsValid == false)
+                {
+                    return new GenericCommandResult(false, CommandMessages.InsertError, c.Notifications);
+                }*/
+
+
+                var pc = _mapper.Map<Computador>(command);
                 await data.Computadores.AdicionarAsync(pc);
                 results.Add(await data.Save());
                 results.Add(await data.Commit());

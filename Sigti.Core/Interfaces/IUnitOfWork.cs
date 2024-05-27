@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Sigti.Core.Interfaces
 {
-    public interface IUnitForWork
+    public interface IUnitOfWork
     {//Define the Specific Repositories
         IComputadorRepository Computadores { get; }
         IImpressoraRepository Impressoras { get; }
-        Task<(bool success, string message)> CreateTransaction();
-        Task<(bool success, string message)> Commit();
-        Task<(bool success, string message)> Rollback();
-        Task<(bool success, string message)> Save();
+        Task<bool> Init();
+        Task<bool> Commit();
+        Task Rollback();
+        Task<bool> Save();
     }
 }
