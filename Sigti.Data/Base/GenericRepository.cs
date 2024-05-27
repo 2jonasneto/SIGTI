@@ -57,6 +57,7 @@ namespace Sigti.Data.Base
 
         public async Task UpdateAsync(T entity)
         {
+
             _context.Update(entity);
         }
     }

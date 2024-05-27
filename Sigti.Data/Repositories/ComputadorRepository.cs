@@ -4,6 +4,7 @@ using Sigti.Data.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,14 +17,30 @@ namespace Sigti.Data.Repositories
         {
             _repository = repository;
         }
-        public async Task AdicionarAsync(Computador computador)
+        public async Task AddAsync(Computador computador)
         {
            await _repository.CreateAsync(computador);
         }
 
-        public Task AtualizarAsync(Computador computador)
+        public async Task<Computador> ByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+           return await _repository.GetByIdAsync(id);
         }
+
+        public async Task<IEnumerable<Computador>> ListAllAsync()
+        {
+            return await _repository.GetAllAsync();
+        }
+
+        public async Task<IEnumerable<Computador>> ListAllAsync(Expression<Func<Computador, bool>> expression)
+        {
+            return await _repository.GetAllByExpressionAsync(expression);
+        }
+
+        public async Task UpdateAsync(Computador computador)
+        {
+            await _repository.UpdateAsync(computador);
+        }
+
     }
 }
