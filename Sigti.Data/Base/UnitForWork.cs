@@ -21,24 +21,65 @@ namespace Sigti.Core.Interfaces
 
         }
 
-        public void Commit()
+        public async Task<(bool success, string message)> Commit()
         {
-            transaction?.Commit();
+            try
+            {
+                await transaction?.CommitAsync();
+                return (true, "OK");
+            }
+            catch (Exception ex)
+            {
+
+                return (false, ex.Message);
+            }
+
         }
 
-        public void CreateTransaction()
+        public async Task<(bool success, string message)> CreateTransaction()
         {
-            transaction = _context.Database.BeginTransaction();
+
+            try
+            {
+                transaction = await _context.Database.BeginTransactionAsync();
+                return (true, "OK");
+            }
+            catch (Exception ex)
+            {
+
+                return (false, ex.Message);
+            }
+
         }
 
-        public void Rollback()
+        public async Task<(bool success, string message)> Rollback()
         {
-            transaction?.Rollback();
+            try
+            {
+               await transaction?.RollbackAsync();
+                return (true, "OK");
+            }
+            catch (Exception ex)
+            {
+
+                return (false, ex.Message);
+            }
+         
         }
 
-        public async Task Save()
+        public async Task<(bool success, string message)> Save()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+             var rs=   await _context.SaveChangesAsync()>0;
+                return rs? (true, "OK") : (false, "Não foi possivel salvar as alterações.");
+            }
+            catch (Exception ex)
+            {
+
+                return (false, ex.Message);
+            }
+            
         }
     }
 }

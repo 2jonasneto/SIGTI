@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.Interfaces
 {
-    public interface ICommandHandler<T> where T:ICommand 
+    public interface ICommandResult
     {
-        Task<ICommandResult> Execute(T command);
     }
 }

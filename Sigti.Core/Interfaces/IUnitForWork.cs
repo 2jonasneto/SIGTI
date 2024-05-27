@@ -11,9 +11,9 @@ namespace Sigti.Core.Interfaces
     {//Define the Specific Repositories
         IComputadorRepository Computadores { get; }
         IImpressoraRepository Impressoras { get; }
-        void CreateTransaction();
-        void Commit();
-        void Rollback();
-        Task Save();
+        Task<(bool success, string message)> CreateTransaction();
+        Task<(bool success, string message)> Commit();
+        Task<(bool success, string message)> Rollback();
+        Task<(bool success, string message)> Save();
     }
 }
