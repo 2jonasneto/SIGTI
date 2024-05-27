@@ -66,5 +66,9 @@ namespace Sigti.Application.Handlers
         {
             return Notifications;
         }
+        public IReadOnlyCollection<Notification> GetNotifications()
+        {
+            return Notifications;
+        }
     }
 }
