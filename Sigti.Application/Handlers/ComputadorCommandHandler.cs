@@ -26,8 +26,7 @@ namespace Sigti.Application.Handlers
 
         public async Task<ICommandResult> Execute(AdicionarComputadorCommand command)
         {
-            try
-            {
+           
 
                 /*c.Validate();
                 if (c.IsValid == false)
@@ -36,23 +35,15 @@ namespace Sigti.Application.Handlers
                 }*/
                 if (_data.Computadores.Create(_mapper.Map<Computador>(command)))
                 {
-
+                    AddNotifications(_data.Computadores.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
                 }
-
-                var pc = _mapper.Map<Computador>(command);
-                await _data.Computadores.AdicionarAsync(pc);
-                results.Add(await data.Save());
-                results.Add(await data.Commit());
-
-                return new CommandResult(results);
-            }
-            catch (Exception ex)
-            {
-              await  data.Rollback();
-                return new CommandResult(false, "Ocorreu um ao executar esta operação\n\n"+ex.Message);
-               
-            }
-
+                if (!await _data.Save())
+                {
+                    AddNotifications(_data.Computadores.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                }
+                return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
 
         }
 
@@ -76,6 +67,10 @@ namespace Sigti.Application.Handlers
                 return new CommandResult(false, "Ocorreu um ao executar esta operação\n\n" + ex.Message);
 
             }
+        }
+        public IReadOnlyCollection<Notification> GetNotifications()
+        {
+            return Notifications;
         }
     }
 }

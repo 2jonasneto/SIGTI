@@ -1,5 +1,5 @@
 ﻿using Sigti.Core.Entities;
-using System;
+using Flunt.Notifications;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,5 +18,10 @@ namespace Sigti.Core.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T,bool>> expression);
         Task<T> GetByIdAsync(Guid id);
+
+
+
+        IReadOnlyCollection<Notification> GetNotifications();
+        void NotificationsClear();
     }
 }
