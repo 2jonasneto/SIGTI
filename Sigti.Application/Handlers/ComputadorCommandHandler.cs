@@ -34,10 +34,13 @@ namespace Sigti.Application.Handlers
                 {
                     return new GenericCommandResult(false, CommandMessages.InsertError, c.Notifications);
                 }*/
+                if (_data.Computadores.Create(_mapper.Map<Computador>(command)))
+                {
 
+                }
 
                 var pc = _mapper.Map<Computador>(command);
-                await data.Computadores.AdicionarAsync(pc);
+                await _data.Computadores.AdicionarAsync(pc);
                 results.Add(await data.Save());
                 results.Add(await data.Commit());
 

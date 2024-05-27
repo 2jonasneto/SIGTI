@@ -9,12 +9,8 @@ using System.Threading.Tasks;
 
 namespace Sigti.Core.Repositories
 {
-    public interface IComputadorRepository
+    public interface IComputadorRepository:IGenericRepository<Computador>
     {
-        Task AddAsync(Computador computador);
-        Task UpdateAsync(Computador computador);
-        Task<IEnumerable<Computador>> ListAllAsync();
-        Task<IEnumerable<Computador>> ListAllAsync(Expression<Func<Computador,bool>> expression);
-        Task<Computador> ByIdAsync(Guid id);
+      
     }
 }

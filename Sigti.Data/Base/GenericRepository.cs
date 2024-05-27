@@ -136,7 +136,10 @@ namespace Sigti.Data.Base
             }
           
         }
+        public IReadOnlyCollection<Notification> GetNotifications()
+        {
+            return Notifications;
+        }
 
-      
     }
 }
