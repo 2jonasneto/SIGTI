@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Sigti.Core\Sigti.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
 </Project>

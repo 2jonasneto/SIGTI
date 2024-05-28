@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Sigti.Core.Entities;
 using System.Reflection;
 
 namespace Sigti.Data.Base
@@ -12,5 +13,6 @@ namespace Sigti.Data.Base
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
         }
+        public DbSet<Computador> Computadores { get; set; }
     }
 }

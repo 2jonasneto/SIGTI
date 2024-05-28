@@ -25,7 +25,7 @@ namespace Sigti.Data.Base
         {
             try
             {
-                 _context.Add(entity);
+                 _context.Add<T>(entity);
                 return true;
             }
             catch (Exception ex)
@@ -141,5 +141,9 @@ namespace Sigti.Data.Base
             return Notifications;
         }
 
+        public void NotificationsClear()
+        {
+           Clear();
+        }
     }
 }

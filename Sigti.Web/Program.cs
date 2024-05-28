@@ -1,10 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using Sigti.Data.Base;
 using Sigti.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDbContext<SigtiContext>(options => options
+.UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
+
 
 var app = builder.Build();
 
@@ -23,5 +29,7 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
+var context = builder.Services.BuildServiceProvider()
+             .GetRequiredService<SigtiContext>();
+context.Database.Migrate();
 app.Run();
