@@ -1,4 +1,5 @@
-﻿using Sigti.Core.Repositories;
+﻿using Flunt.Notifications;
+using Sigti.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,9 @@ namespace Sigti.Core.Interfaces
         Task<bool> Commit();
         Task Rollback();
         Task<bool> Save();
+
+
+        IReadOnlyCollection<Notification> GetNotifications();
+        void NotificationsClear();
     }
 }

@@ -20,8 +20,8 @@ namespace Sigti.Core.Interfaces
         {
             _context = context;
 
-            Computadores = new ComputadorRepository(new GenericRepository<Computador>(_context));
-            Impressoras = new ImpressoraRepository(new GenericRepository<Impressora>(_context));
+            Computadores = new ComputadorRepository(_context);
+            Impressoras = new ImpressoraRepository(_context);
 
         }
       

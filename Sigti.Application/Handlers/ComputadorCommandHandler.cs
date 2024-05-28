@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.Handlers
 {
-    public class ComputadorCommandHandler : Notifiable<Notification>, ICommandHandler<AdicionarComputadorCommand>, ICommandHandler<AtualizarComputadorCommand>
+    public class ComputadorCommandHandler : Notifiable<Notification>, ICommandHandler<AdicionarComputadorCommand>, 
+        ICommandHandler<AtualizarComputadorCommand>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _data;
@@ -33,7 +34,7 @@ namespace Sigti.Application.Handlers
                 {
                     return new GenericCommandResult(false, CommandMessages.InsertError, c.Notifications);
                 }*/
-                if (_data.Computadores.Create(_mapper.Map<Computador>(command)))
+                if (!_data.Computadores.Create(_mapper.Map<Computador>(command)))
                 {
                     AddNotifications(_data.Computadores.GetNotifications());
                     return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
@@ -50,7 +51,22 @@ namespace Sigti.Application.Handlers
         public async Task<ICommandResult> Execute(AtualizarComputadorCommand command)
         {
 
-            if (_data.Computadores.Create(_mapper.Map<Computador>(command)))
+            if (!_data.Computadores.Create(_mapper.Map<Computador>(command)))
+            {
+                AddNotifications(_data.Computadores.GetNotifications());
+                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+            }
+            if (!await _data.Save())
+            {
+                AddNotifications(_data.Computadores.GetNotifications());
+                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+            }
+            return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
+        }
+        public async Task<ICommandResult> Execute(RemoverComputadorCommand command)
+        {
+
+            if (!_data.Computadores.Delete(command.Id))
             {
                 AddNotifications(_data.Computadores.GetNotifications());
                 return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
@@ -66,9 +82,7 @@ namespace Sigti.Application.Handlers
         {
             return Notifications;
         }
-        public IReadOnlyCollection<Notification> GetNotifications()
-        {
-            return Notifications;
-        }
+        
     }
+  
 }

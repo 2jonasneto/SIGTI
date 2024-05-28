@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.Interfaces
 {
-    public interface ICommand
+    public interface ICommand: IValidatable
     {
     }
 }
