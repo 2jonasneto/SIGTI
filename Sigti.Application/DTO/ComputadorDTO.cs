@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.DTO
 {
-    internal class ComputadorDTO:IDTO
+    public class ComputadorDTO:IDTO
     {
 
     }
