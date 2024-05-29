@@ -6,7 +6,7 @@ namespace Sigti.Application
     public class RemoverComputadorCommand : Notifiable<Notification>, ICommand
     {
         public Guid Id { get; set; }
-        public RemoverComputadorCommand( Guid id)
+        public RemoverComputadorCommand(Guid id)
         {
             this.Id = id;
         }

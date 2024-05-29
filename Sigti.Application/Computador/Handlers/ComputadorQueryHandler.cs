@@ -29,6 +29,18 @@ namespace Sigti.Application.Handlers
             return lista;
 
         }
+        public async Task<IEnumerable<ListaComputadorGridDTO>> GridComputadores()
+        {
+            List<ListaComputadorGridDTO> lista = new();
+            var pcs =await _data.Computadores.GetAllAsync();
+
+            foreach (var pc in pcs)
+            {
+                lista.Add(new ListaComputadorGridDTO(pc.DataModificacao, pc.HostName, pc.Patrimonio, pc.SetorId, pc.LocalizacaoId));
+            }
+            return lista;
+            
+        }
         public async Task<ComputadorDTO> GetById(Guid id)
         {
             var pc = _mapper.Map<ComputadorDTO>(await _data.Computadores.GetByIdAsync(id));
@@ -38,14 +50,7 @@ namespace Sigti.Application.Handlers
 
         
 
-        public Task<IEnumerable<ComputadorDTO>> GetByQuery()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<ComputadorDTO>> GetByQuery(Expression<Func<Computador, bool>> query)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

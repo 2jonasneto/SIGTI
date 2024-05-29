@@ -42,6 +42,14 @@ app.MapGet("v1/Computadores", ([FromServices] IComputadorQueryHandler query) =>
 })
 .WithName("GetComputadores")
 .WithOpenApi();
+
+app.MapGet("v2/Computadores", ([FromServices] IComputadorQueryHandler query) =>
+{
+    return query.GridComputadores();
+})
+.WithName("GetGridComputadores")
+.WithOpenApi();
+
 app.MapPost("v1/Computadores", async ([FromServices] ICommandHandler<AdicionarComputadorCommand> cmd) =>
 {
     var pc = new AdicionarComputadorCommand("TESTE", "INTEL", "4", "256", "10.0.0.1", "123456789", "WWW", "eu", "12334", "indows", "eu", Guid.NewGuid(), Guid.NewGuid(), "vamo ver");

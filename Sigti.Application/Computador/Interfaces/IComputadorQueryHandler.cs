@@ -12,5 +12,6 @@ namespace Sigti.Application.Interfaces
     public interface IComputadorQueryHandler
     {
         Task<IEnumerable<ComputadorDTO>> ListaCmputadores();
+        Task<IEnumerable<ListaComputadorGridDTO>> GridComputadores();
     }
 }

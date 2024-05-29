@@ -1,6 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Sigti.Data.Base;
+using Sigti.Application.Handlers;
+using Sigti.Application.Interfaces;
+using Sigti.Application;
+using Sigti.Core.Interfaces;
 using Sigti.Web.Components;
+using Sigti.Data.Base;
+using MudBlazor.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +16,13 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddDbContext<SigtiContext>(options => options
 .UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
+builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
+builder.Services.AddScoped<IComputadorQueryHandler, ComputadorQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddMudServices();
 
-
-var app = builder.Build();
+var app = builder.Build();  
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,6 +40,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 var context = builder.Services.BuildServiceProvider()
-             .GetRequiredService<SigtiContext>();
+             .GetRequiredService<Sigti.Data.Base.SigtiContext>();
 context.Database.Migrate();
 app.Run();

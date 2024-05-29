@@ -10,6 +10,7 @@ namespace Sigti.Application.Base
         public DTOMapping()
         {
           CreateMap<Computador,ComputadorDTO>();  
+       
           CreateMap<AdicionarComputadorCommand,Computador>();  
           CreateMap<AtualizarComputadorCommand,Computador>();  
           

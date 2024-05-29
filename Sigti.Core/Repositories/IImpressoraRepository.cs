@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Sigti.Core.Repositories
 {
-    public interface IImpressoraRepository:IGenericRepository<Impressora>
+    public interface IImpressoraRepository : IGenericRepository<Impressora>
     {
-      }
+    }
 }
