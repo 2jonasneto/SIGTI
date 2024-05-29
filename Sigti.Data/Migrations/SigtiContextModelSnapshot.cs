@@ -260,7 +260,8 @@ namespace Sigti.Data.Migrations
                         .HasColumnType("Varchar(150)");
 
                     b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
 
                     b.Property<string>("Observacao")
                         .IsRequired()
@@ -324,7 +325,8 @@ namespace Sigti.Data.Migrations
                         .HasColumnType("Varchar(150)");
 
                     b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
 
                     b.Property<string>("Observacao")
                         .IsRequired()
@@ -363,17 +365,30 @@ namespace Sigti.Data.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("Varchar(150)");
+                        .HasColumnType("Varchar(100)");
 
                     b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(50)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Localizacoes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"),
+                            Ativo = true,
+                            DataModificacao = new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2403),
+                            Descricao = "",
+                            ModificadoPor = "SYSTEM",
+                            Nome = "MATRIZ"
+                        });
                 });
 
             modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
@@ -389,22 +404,37 @@ namespace Sigti.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(100)");
 
                     b.Property<Guid>("LocalizacaoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LocalizacaoId");
 
                     b.ToTable("Setores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ec69e422-fb19-4aa4-a50e-3e75fd75fca0"),
+                            Ativo = true,
+                            DataModificacao = new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2844),
+                            Descricao = "",
+                            LocalizacaoId = new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"),
+                            ModificadoPor = "SYSTEM",
+                            Nome = "MATRIZ"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -460,45 +490,51 @@ namespace Sigti.Data.Migrations
 
             modelBuilder.Entity("Sigti.Core.Entities.Computador", b =>
                 {
-                    b.HasOne("Sigti.Core.Entities.Localizacao", null)
+                    b.HasOne("Sigti.Core.Entities.Localizacao", "Localizacao")
                         .WithMany("Computadores")
                         .HasForeignKey("LocalizacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Sigti.Core.Entities.Setor", null)
+                    b.HasOne("Sigti.Core.Entities.Setor", "Setor")
                         .WithMany("Computadores")
                         .HasForeignKey("SetorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Localizacao");
+
+                    b.Navigation("Setor");
                 });
 
             modelBuilder.Entity("Sigti.Core.Entities.Impressora", b =>
                 {
-                    b.HasOne("Sigti.Core.Entities.Localizacao", "localizacao")
+                    b.HasOne("Sigti.Core.Entities.Localizacao", "Localizacao")
                         .WithMany("Impressoras")
                         .HasForeignKey("LocalizacaoId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Sigti.Core.Entities.Setor", "Setor")
-                        .WithMany()
+                        .WithMany("Impressoras")
                         .HasForeignKey("SetorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Setor");
+                    b.Navigation("Localizacao");
 
-                    b.Navigation("localizacao");
+                    b.Navigation("Setor");
                 });
 
             modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
                 {
-                    b.HasOne("Sigti.Core.Entities.Localizacao", null)
+                    b.HasOne("Sigti.Core.Entities.Localizacao", "Localizacao")
                         .WithMany("Setores")
                         .HasForeignKey("LocalizacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Localizacao");
                 });
 
             modelBuilder.Entity("Sigti.Core.Entities.Localizacao", b =>
@@ -513,6 +549,8 @@ namespace Sigti.Data.Migrations
             modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
                 {
                     b.Navigation("Computadores");
+
+                    b.Navigation("Impressoras");
                 });
 #pragma warning restore 612, 618
         }

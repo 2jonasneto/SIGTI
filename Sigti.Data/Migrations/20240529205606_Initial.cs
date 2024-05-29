@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sigti.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,22 @@ namespace Sigti.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Localizacoes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Descricao = table.Column<string>(type: "Varchar(100)", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Localizacoes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +172,113 @@ namespace Sigti.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Setores",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Descricao = table.Column<string>(type: "Varchar(100)", nullable: false),
+                    LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Setores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Setores_Localizacoes_LocalizacaoId",
+                        column: x => x.LocalizacaoId,
+                        principalTable: "Localizacoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Computadores",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HostName = table.Column<string>(type: "Varchar(150)", nullable: false),
+                    Processador = table.Column<string>(type: "Varchar(150)", nullable: false),
+                    Memoria = table.Column<string>(type: "Varchar(150)", nullable: false),
+                    Disco = table.Column<string>(type: "Varchar(150)", nullable: false),
+                    Ip = table.Column<string>(type: "Varchar(20)", nullable: false),
+                    Anydesk = table.Column<string>(type: "Varchar(20)", nullable: false),
+                    Grupos = table.Column<string>(type: "Varchar(150)", nullable: false),
+                    UltimoUsuarioLogado = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Patrimonio = table.Column<string>(type: "Varchar(20)", nullable: false),
+                    SistemaOperacional = table.Column<string>(type: "Varchar(100)", nullable: false),
+                    SetorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Observacao = table.Column<string>(type: "Varchar(300)", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Computadores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Computadores_Localizacoes_LocalizacaoId",
+                        column: x => x.LocalizacaoId,
+                        principalTable: "Localizacoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Computadores_Setores_SetorId",
+                        column: x => x.SetorId,
+                        principalTable: "Setores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Impressoras",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Modelo = table.Column<string>(type: "Varchar(150)", nullable: false),
+                    Patrimonio = table.Column<string>(type: "Varchar(20)", nullable: false),
+                    Alugado = table.Column<bool>(type: "bit", nullable: false),
+                    SetorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Observacao = table.Column<string>(type: "Varchar(300)", nullable: false),
+                    Ip = table.Column<string>(type: "Varchar(20)", nullable: false),
+                    Conexao = table.Column<int>(type: "int", nullable: false),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Impressoras", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Impressoras_Localizacoes_LocalizacaoId",
+                        column: x => x.LocalizacaoId,
+                        principalTable: "Localizacoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Impressoras_Setores_SetorId",
+                        column: x => x.SetorId,
+                        principalTable: "Setores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Localizacoes",
+                columns: new[] { "Id", "Ativo", "DataModificacao", "Descricao", "Varchar(50)", "Nome" },
+                values: new object[] { new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), true, new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2403), "", "SYSTEM", "MATRIZ" });
+
+            migrationBuilder.InsertData(
+                table: "Setores",
+                columns: new[] { "Id", "Ativo", "DataModificacao", "Descricao", "LocalizacaoId", "Varchar(50)", "Nome" },
+                values: new object[] { new Guid("ec69e422-fb19-4aa4-a50e-3e75fd75fca0"), true, new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2844), "", new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), "SYSTEM", "MATRIZ" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,6 +317,31 @@ namespace Sigti.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Computadores_LocalizacaoId",
+                table: "Computadores",
+                column: "LocalizacaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Computadores_SetorId",
+                table: "Computadores",
+                column: "SetorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Impressoras_LocalizacaoId",
+                table: "Impressoras",
+                column: "LocalizacaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Impressoras_SetorId",
+                table: "Impressoras",
+                column: "SetorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Setores_LocalizacaoId",
+                table: "Setores",
+                column: "LocalizacaoId");
         }
 
         /// <inheritdoc />
@@ -215,10 +363,22 @@ namespace Sigti.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Computadores");
+
+            migrationBuilder.DropTable(
+                name: "Impressoras");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Setores");
+
+            migrationBuilder.DropTable(
+                name: "Localizacoes");
         }
     }
 }

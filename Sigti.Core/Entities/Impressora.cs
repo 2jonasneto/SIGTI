@@ -54,7 +54,7 @@ namespace Sigti.Core.Entities
 
 
         public Setor Setor { get; set; }
-        public Localizacao localizacao { get; set; }
+        public Localizacao Localizacao { get; set; }
     }
 
 }

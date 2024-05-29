@@ -22,6 +22,7 @@
 
 
         public ICollection<Computador> Computadores { get;  }
+        public ICollection<Impressora> Impressoras { get;  }
         public Localizacao Localizacao { get;  }
     }
 }

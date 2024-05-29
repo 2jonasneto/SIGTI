@@ -6,7 +6,7 @@
 @inject IComputadorQueryHandler query
 <h3>Computadores</h3>
 
-<MudDataGrid Items="@Computadors">
+<MudDataGrid Items="@Computadores">
     <Columns>
         <PropertyColumn Property="x => x.dataModificacao" Title="Nr" />
         <PropertyColumn Property="x => x.hostName" />
@@ -25,10 +25,10 @@
     </Columns>
 </MudDataGrid>
 @code {
-    private IEnumerable<ListaComputadorGridDTO> Computadors = new List<ListaComputadorGridDTO>();
+    private IEnumerable<ListaComputadorGridDTO> Computadores = new List<ListaComputadorGridDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        Computadors = await query.GridComputadores();
+        Computadores = await query.GridComputadores();
     }
 }

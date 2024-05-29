@@ -12,8 +12,8 @@ using Sigti.Data.Base;
 namespace Sigti.Data.Migrations
 {
     [DbContext(typeof(SigtiContext))]
-    [Migration("20240528210011_computador")]
-    partial class computador
+    [Migration("20240529205606_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,7 +230,8 @@ namespace Sigti.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Anydesk")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(20)");
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
@@ -239,47 +240,204 @@ namespace Sigti.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Disco")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(150)");
 
                     b.Property<string>("Grupos")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(150)");
 
                     b.Property<string>("HostName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(150)");
 
                     b.Property<string>("Ip")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(20)");
 
                     b.Property<Guid>("LocalizacaoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Memoria")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(150)");
 
                     b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
 
                     b.Property<string>("Observacao")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(300)");
 
                     b.Property<string>("Patrimonio")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(20)");
 
                     b.Property<string>("Processador")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(150)");
 
                     b.Property<Guid>("SetorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SistemaOperacional")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(100)");
 
                     b.Property<string>("UltimoUsuarioLogado")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("Varchar(50)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocalizacaoId");
+
+                    b.HasIndex("SetorId");
+
                     b.ToTable("Computadores");
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Impressora", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Alugado")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Conexao")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataModificacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ip")
+                        .IsRequired()
+                        .HasColumnType("Varchar(20)");
+
+                    b.Property<Guid>("LocalizacaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Modelo")
+                        .IsRequired()
+                        .HasColumnType("Varchar(150)");
+
+                    b.Property<string>("ModificadoPor")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
+
+                    b.Property<string>("Observacao")
+                        .IsRequired()
+                        .HasColumnType("Varchar(300)");
+
+                    b.Property<string>("Patrimonio")
+                        .IsRequired()
+                        .HasColumnType("Varchar(20)");
+
+                    b.Property<Guid>("SetorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalizacaoId");
+
+                    b.HasIndex("SetorId");
+
+                    b.ToTable("Impressoras");
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Localizacao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataModificacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("Varchar(100)");
+
+                    b.Property<string>("ModificadoPor")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("Varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Localizacoes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"),
+                            Ativo = true,
+                            DataModificacao = new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2403),
+                            Descricao = "",
+                            ModificadoPor = "SYSTEM",
+                            Nome = "MATRIZ"
+                        });
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataModificacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("Varchar(100)");
+
+                    b.Property<Guid>("LocalizacaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ModificadoPor")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Varchar(50)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("Varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalizacaoId");
+
+                    b.ToTable("Setores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ec69e422-fb19-4aa4-a50e-3e75fd75fca0"),
+                            Ativo = true,
+                            DataModificacao = new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2844),
+                            Descricao = "",
+                            LocalizacaoId = new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"),
+                            ModificadoPor = "SYSTEM",
+                            Nome = "MATRIZ"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -331,6 +489,71 @@ namespace Sigti.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Computador", b =>
+                {
+                    b.HasOne("Sigti.Core.Entities.Localizacao", "Localizacao")
+                        .WithMany("Computadores")
+                        .HasForeignKey("LocalizacaoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sigti.Core.Entities.Setor", "Setor")
+                        .WithMany("Computadores")
+                        .HasForeignKey("SetorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Localizacao");
+
+                    b.Navigation("Setor");
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Impressora", b =>
+                {
+                    b.HasOne("Sigti.Core.Entities.Localizacao", "Localizacao")
+                        .WithMany("Impressoras")
+                        .HasForeignKey("LocalizacaoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sigti.Core.Entities.Setor", "Setor")
+                        .WithMany("Impressoras")
+                        .HasForeignKey("SetorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Localizacao");
+
+                    b.Navigation("Setor");
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
+                {
+                    b.HasOne("Sigti.Core.Entities.Localizacao", "Localizacao")
+                        .WithMany("Setores")
+                        .HasForeignKey("LocalizacaoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Localizacao");
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Localizacao", b =>
+                {
+                    b.Navigation("Computadores");
+
+                    b.Navigation("Impressoras");
+
+                    b.Navigation("Setores");
+                });
+
+            modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
+                {
+                    b.Navigation("Computadores");
+
+                    b.Navigation("Impressoras");
                 });
 #pragma warning restore 612, 618
         }

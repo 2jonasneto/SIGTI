@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sigti.Core.Entities;
-using Sigti.Data.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -58,5 +58,8 @@
         public Guid LocalizacaoId { get; private set; }
         public string Observacao { get; private set; }
 
+
+        public Setor Setor { get; set; }
+        public Localizacao Localizacao { get; set; }
     }
 }

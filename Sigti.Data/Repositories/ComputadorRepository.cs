@@ -17,5 +17,5 @@ namespace Sigti.Data.Repositories
         public ComputadorRepository(SigtiContext context) : base(context)
         {
         }
-    }
+    } 
 }

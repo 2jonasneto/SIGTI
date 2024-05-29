@@ -5,13 +5,14 @@
         {
             
         }
-        public Localizacao(string nome, string descricao, Guid localizacaoId, string modificadoPor)
+        public Localizacao(string nome, string descricao, string modificadoPor, Guid id = default)
         {
             Nome = nome;
             Descricao = descricao;
             ModificadoPor = modificadoPor;
+            if (id != default) { Id = id; }
         }
-        public void Atualizar(string nome, string descricao, Guid localizacaoId, string modificadoPor)
+        public void Atualizar(string nome, string descricao,  string modificadoPor)
         {
             Nome = nome;
             Descricao = descricao;

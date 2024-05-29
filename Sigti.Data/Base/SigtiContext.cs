@@ -12,6 +12,10 @@ namespace Sigti.Data.Base
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
+            builder.Entity<Localizacao>().HasData(new Localizacao("MATRIZ", "", "SYSTEM",Guid.Parse("dc3d00ff-e610-4e9c-a333-05bf70aa6c14")));
+            builder.Entity<Setor>().HasData(new Setor("MATRIZ", "", Guid.Parse("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), "SYSTEM"));
+           
+            
         }
         public DbSet<Computador> Computadores { get; set; }
         public DbSet<Impressora> Impressoras { get; set; }

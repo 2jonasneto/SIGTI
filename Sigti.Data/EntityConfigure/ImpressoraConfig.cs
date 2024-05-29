@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sigti.Core.Entities;
-using Sigti.Data.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +22,6 @@ namespace Sigti.Data.EntityConfigure
 
 
            
-
-        }
-    }
-    public class LocalizacaoConfig : IEntityTypeConfiguration<Localizacao>
-    {
-        public void Configure(EntityTypeBuilder<Localizacao> builder)
-        {
-            builder.HasKey(c => c.Id);
-            builder.Property(x => x.Descricao).IsRequired().HasColumnType("Varchar(150)");
-
-
-
-            builder.HasMany(f => f.Impressoras).WithOne(b => b.localizacao).HasForeignKey(b => b.LocalizacaoId).OnDelete(DeleteBehavior.SetNull);
 
         }
     }

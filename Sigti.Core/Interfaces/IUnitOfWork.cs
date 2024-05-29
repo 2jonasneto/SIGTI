@@ -12,6 +12,8 @@ namespace Sigti.Core.Interfaces
     {//Define the Specific Repositories
         IComputadorRepository Computadores { get; }
         IImpressoraRepository Impressoras { get; }
+        ILocalizacaoRepository Localizacoes { get; }
+        ISetorRepository Setores { get; }
         Task<bool> Init();
         Task<bool> Commit();
         Task Rollback();
