@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sigti.Data.Base;
 
@@ -11,9 +12,11 @@ using Sigti.Data.Base;
 namespace Sigti.Data.Migrations
 {
     [DbContext(typeof(SigtiContext))]
-    partial class SigtiContextModelSnapshot : ModelSnapshot
+    [Migration("20240529130114_configcorrecao")]
+    partial class configcorrecao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

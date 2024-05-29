@@ -14,5 +14,8 @@ namespace Sigti.Data.Base
             base.OnModelCreating(builder);
         }
         public DbSet<Computador> Computadores { get; set; }
+        public DbSet<Impressora> Impressoras { get; set; }
+        public DbSet<Localizacao> Localizacoes { get; set; }
+        public DbSet<Setor> Setores { get; set; }
     }
 }

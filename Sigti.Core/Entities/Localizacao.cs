@@ -1,6 +1,10 @@
 ﻿namespace Sigti.Core.Entities
 {
     public sealed class Localizacao:Entity {
+        protected Localizacao()
+        {
+            
+        }
         public Localizacao(string nome, string descricao, Guid localizacaoId, string modificadoPor)
         {
             Nome = nome;
@@ -19,6 +23,7 @@
 
 
         public ICollection<Computador> Computadores { get; }
+        public ICollection<Impressora> Impressoras { get; }
         public ICollection<Setor> Setores { get; }
     }
 }

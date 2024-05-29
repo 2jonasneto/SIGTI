@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sigti.Data.Base;
 
@@ -11,9 +12,11 @@ using Sigti.Data.Base;
 namespace Sigti.Data.Migrations
 {
     [DbContext(typeof(SigtiContext))]
-    partial class SigtiContextModelSnapshot : ModelSnapshot
+    [Migration("20240529115727_configComputador")]
+    partial class configComputador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,9 +225,8 @@ namespace Sigti.Data.Migrations
 
             modelBuilder.Entity("Sigti.Core.Entities.Computador", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Processador")
+                        .HasColumnType("Varchar(150)");
 
                     b.Property<string>("Anydesk")
                         .IsRequired()
@@ -248,6 +250,9 @@ namespace Sigti.Data.Migrations
                         .IsRequired()
                         .HasColumnType("Varchar(150)");
 
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Ip")
                         .IsRequired()
                         .HasColumnType("Varchar(20)");
@@ -270,10 +275,6 @@ namespace Sigti.Data.Migrations
                         .IsRequired()
                         .HasColumnType("Varchar(20)");
 
-                    b.Property<string>("Processador")
-                        .IsRequired()
-                        .HasColumnType("Varchar(150)");
-
                     b.Property<Guid>("SetorId")
                         .HasColumnType("uniqueidentifier");
 
@@ -285,126 +286,9 @@ namespace Sigti.Data.Migrations
                         .IsRequired()
                         .HasColumnType("Varchar(50)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocalizacaoId");
-
-                    b.HasIndex("SetorId");
+                    b.HasKey("Processador");
 
                     b.ToTable("Computadores");
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Impressora", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Alugado")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Conexao")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataModificacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Ip")
-                        .IsRequired()
-                        .HasColumnType("Varchar(20)");
-
-                    b.Property<Guid>("LocalizacaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Modelo")
-                        .IsRequired()
-                        .HasColumnType("Varchar(150)");
-
-                    b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Observacao")
-                        .IsRequired()
-                        .HasColumnType("Varchar(300)");
-
-                    b.Property<string>("Patrimonio")
-                        .IsRequired()
-                        .HasColumnType("Varchar(20)");
-
-                    b.Property<Guid>("SetorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocalizacaoId");
-
-                    b.HasIndex("SetorId");
-
-                    b.ToTable("Impressoras");
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Localizacao", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DataModificacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("Varchar(150)");
-
-                    b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Localizacoes");
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DataModificacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("LocalizacaoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ModificadoPor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocalizacaoId");
-
-                    b.ToTable("Setores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -456,63 +340,6 @@ namespace Sigti.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Computador", b =>
-                {
-                    b.HasOne("Sigti.Core.Entities.Localizacao", null)
-                        .WithMany("Computadores")
-                        .HasForeignKey("LocalizacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sigti.Core.Entities.Setor", null)
-                        .WithMany("Computadores")
-                        .HasForeignKey("SetorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Impressora", b =>
-                {
-                    b.HasOne("Sigti.Core.Entities.Localizacao", "localizacao")
-                        .WithMany("Impressoras")
-                        .HasForeignKey("LocalizacaoId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.HasOne("Sigti.Core.Entities.Setor", "Setor")
-                        .WithMany()
-                        .HasForeignKey("SetorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Setor");
-
-                    b.Navigation("localizacao");
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
-                {
-                    b.HasOne("Sigti.Core.Entities.Localizacao", null)
-                        .WithMany("Setores")
-                        .HasForeignKey("LocalizacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Localizacao", b =>
-                {
-                    b.Navigation("Computadores");
-
-                    b.Navigation("Impressoras");
-
-                    b.Navigation("Setores");
-                });
-
-            modelBuilder.Entity("Sigti.Core.Entities.Setor", b =>
-                {
-                    b.Navigation("Computadores");
                 });
 #pragma warning restore 612, 618
         }
