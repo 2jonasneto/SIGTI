@@ -1,26 +1,40 @@
 ﻿@using MudBlazor
 @inherits LayoutComponentBase
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
-<div class="page">
-    <div class="sidebar">
+@attribute [StreamRendering]
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudThemeProvider IsDarkMode="true" />
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ButtonOnClick">@ButtonText</MudButton>
+
+        SIG
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu />
-    </div>
+    </MudDrawer>
+     
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+@code {
+    bool _drawerOpen = true;
+    public string Text { get; set; } = "????";
+    public string ButtonText { get; set; } = "Click Me";
+    public int ButtonClicked { get; set; }
 
-    <main>
-        <div class="top-row px-4 bg-primaryC">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+    void ButtonOnClick()
+    {
+        ButtonClicked += 1;
+        Text = $"Awesome x {ButtonClicked}";
+        ButtonText = "Click Me Again";
+    }
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}

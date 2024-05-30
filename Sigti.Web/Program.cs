@@ -32,6 +32,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+var context = builder.Services.BuildServiceProvider()
+             .GetRequiredService<Sigti.Data.Base.SigtiContext>();
+context.Database.Migrate();
 
 app.UseHttpsRedirection();
 
@@ -40,7 +43,4 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-var context = builder.Services.BuildServiceProvider()
-             .GetRequiredService<Sigti.Data.Base.SigtiContext>();
-context.Database.Migrate();
 app.Run();
