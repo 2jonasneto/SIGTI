@@ -12,5 +12,7 @@ namespace Sigti.Application.Interfaces
     public interface ISetorQueryHandler
     {
         Task<IEnumerable<SetorDTO>> ListaSetores();
+        Task<IEnumerable<ListaSetorGridDTO>> GridSetores();
+
     }
 }

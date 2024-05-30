@@ -1,18 +1,17 @@
-﻿@page "/computadores/lista"
+﻿@page "/setores/lista"
 @attribute [StreamRendering]
 @using MudBlazor
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
-@inject IComputadorQueryHandler query
-<h3>Computadores</h3>
+@inject ISetorQueryHandler query
+<h3>Setores</h3>
 
-<MudDataGrid Items="@Computadores">
+<MudDataGrid Items="@Setores">
     <Columns>
-        <PropertyColumn Property="x => x.dataModificacao" Title="Nr" />
-        <PropertyColumn Property="x => x.hostName" />
-        <PropertyColumn Property="x => x.patrimonio" />
-        <PropertyColumn Property="x => x.setorId" />
-        <PropertyColumn Property="x => x.localizacaoId" Title="Molar mass" />
+        <PropertyColumn Property="x => x.dataModificacao" Title="Última Alteração" />
+        <PropertyColumn Property="x => x.nome" Title="Nome" />
+        <PropertyColumn Property="x => x.descricao" Title="Descrição" />
+        <PropertyColumn Property="x => x.localizacaoId" Title="Localização" />
         <TemplateColumn CellClass="d-flex justify-end">
             <CellTemplate>
                 <MudStack Row>
@@ -25,10 +24,10 @@
     </Columns>
 </MudDataGrid>
 @code {
-    private IEnumerable<ListaComputadorGridDTO> Computadores = new List<ListaComputadorGridDTO>();
+    private IEnumerable<ListaSetorGridDTO> Setores = new List<ListaSetorGridDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        Computadores = await query.GridComputadores();
+        Setores = await query.GridSetores();
     }
 }

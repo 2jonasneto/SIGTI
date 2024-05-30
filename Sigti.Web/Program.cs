@@ -18,6 +18,7 @@ builder.Services.AddDbContext<SigtiContext>(options => options
 .UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
 builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
 builder.Services.AddScoped<IComputadorQueryHandler, ComputadorQueryHandler>();
+builder.Services.AddScoped<ISetorQueryHandler, SetorQueryHandler>();
 builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddMudServices();

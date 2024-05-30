@@ -22,4 +22,8 @@
 		<ProjectReference Include="..\Sigti.Data\Sigti.Data.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Components\Pages\Localizacoes\" />
+	</ItemGroup>
+
 </Project>

@@ -29,7 +29,7 @@ namespace Sigti.Application.Handlers
             return lista;
 
         }
-        public async Task<IEnumerable<ListaSetorGridDTO>> GridSetors()
+        public async Task<IEnumerable<ListaSetorGridDTO>> GridSetores()
         {
             List<ListaSetorGridDTO> lista = new();
             var setors = await _data.Setores.GetAllAsync();
