@@ -1,6 +1,46 @@
 ﻿@page "/computador/lista"
-<h3>ComputadorLista</h3>
+@using Sigti.Application.DTO
+@using Sigti.Application.Interfaces
+@inject IComputadorQueryHandler Query
+<h3>Lista de computadores</h3>
+<MudDivider/>
+<br />
+<br />
+<br />
+<MudDataGrid Items="@Computadores" >
+    <Columns>
+        <HierarchyColumn T="ComputadorDTO"/>
 
+        <PropertyColumn Property="x => x.HostName" Title="Nome do Host" />
+        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" />
+        <PropertyColumn Property="x => x.LocalizacaoId" Title="Localidade" />
+        <PropertyColumn Property="x => x.SetorId" Title="Setor" />
+        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" />
+    </Columns>
+    <ChildRowContent>
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@context.Item.Processador</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText> @context.Item.Memoria</MudText>
+                <MudText> @context.Item.Disco</MudText>
+                <MudText> @context.Item.Ip</MudText>
+                <MudText> @context.Item.SistemaOperacional</MudText>
+                <MudText> @context.Item.Anydesk</MudText>
+                <MudText> @context.Item.Grupos</MudText>
+                <MudText> @context.Item.Observacao</MudText>
+            </MudCardContent>
+        </MudCard>
+    </ChildRowContent>
+</MudDataGrid>
 @code {
+    private IEnumerable<ComputadorDTO> Computadores = new List<ComputadorDTO>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        Computadores = await Query.ListaCmputadores();
+    }
 }

@@ -14,4 +14,9 @@
     <Folder Include="Components\Layout\NovaPasta\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sigti.Application\Sigti.Application.csproj" />
+    <ProjectReference Include="..\Sigti.Data\Sigti.Data.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,11 @@
 using MudBlazor.Services;
 using Sigti.Web.Components;
-
+using Sigti.Data.Base;
+using Sigti.Application.Interfaces;
+using Sigti.Core.Interfaces;
+using Sigti.Application;
+using Sigti.Application.Handlers;
+using Microsoft.EntityFrameworkCore;
 namespace Sigti.Web
 {
     public class Program
@@ -13,7 +18,13 @@ namespace Sigti.Web
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddMudServices();
-
+            builder.Services.AddDbContext<SigtiContext>(options => options
+            .UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
+            builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
+            builder.Services.AddScoped<IComputadorQueryHandler, ComputadorQueryHandler>();
+            builder.Services.AddScoped<ISetorQueryHandler, SetorQueryHandler>();
+            builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -23,6 +34,10 @@ namespace Sigti.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseHttpsRedirection();
+            var context = builder.Services.BuildServiceProvider().GetRequiredService<SigtiContext>();
+            context.Database.Migrate();
 
             app.UseHttpsRedirection();
 
