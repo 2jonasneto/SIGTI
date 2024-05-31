@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sigti.Application", "Sigti.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sigti.Api", "Sigti.Api\Sigti.Api.csproj", "{D3221628-1854-4261-BE01-FCA16DCE57C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigti.Web", "Sigti.Web\Sigti.Web.csproj", "{C34DE0CF-8E51-4014-A2FB-680908147076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sigti.Web", "Sigti.Web\Sigti.Web.csproj", "{C34DE0CF-8E51-4014-A2FB-680908147076}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
