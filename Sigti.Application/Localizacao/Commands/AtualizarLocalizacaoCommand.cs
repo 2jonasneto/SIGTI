@@ -6,14 +6,19 @@ namespace Sigti.Application
 {
     public class AtualizarLocalizacaoCommand : Notifiable<Notification>,  ICommand
     {
-        public AtualizarLocalizacaoCommand(string nome, string descricao, string modificadoPor)
+        public AtualizarLocalizacaoCommand(Guid id,string nome, string descricao, string modificadoPor)
         {
             Nome = nome;
             Descricao = descricao;
             ModificadoPor = modificadoPor;
+            Id = id;
+        }
+        public AtualizarLocalizacaoCommand()
+        {
+            
         }
 
-
+        public Guid Id { get;  set; }
         public string Nome { get;  set; }
         public string Descricao { get;  set; }
         public string ModificadoPor { get;  set; }

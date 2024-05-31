@@ -40,6 +40,7 @@ namespace Sigti.Core.Entities
             Conexao = conexao;
             Tipo = tipo;
             ModificadoPor = modificadoPor;
+            DataModificacao = DateTime.Now;
         }
 
         public string Modelo { get; private set; }

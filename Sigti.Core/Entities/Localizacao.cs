@@ -11,12 +11,18 @@
             Descricao = descricao;
             ModificadoPor = modificadoPor;
             if (id != default) { Id = id; }
+        } public Localizacao(string nome, string descricao, string modificadoPor)
+        {
+            Nome = nome;
+            Descricao = descricao;
+            ModificadoPor = modificadoPor;
         }
         public void Atualizar(string nome, string descricao,  string modificadoPor)
         {
             Nome = nome;
             Descricao = descricao;
             ModificadoPor = modificadoPor;
+            DataModificacao=DateTime.Now;
         }
 
         public string Nome { get; private set; }

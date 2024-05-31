@@ -5,10 +5,16 @@ namespace Sigti.Application
 {
     public class RemoverLocalizacaoCommand : Notifiable<Notification>, ICommand
     {
+        public RemoverLocalizacaoCommand()
+        {
+            
+        }
         public Guid Id { get; set; }
-        public RemoverLocalizacaoCommand(Guid id)
+        public string Nome { get; set; }
+        public RemoverLocalizacaoCommand(Guid id, string nome)
         {
             this.Id = id;
+            Nome = nome;
         }
 
         public void Validate()

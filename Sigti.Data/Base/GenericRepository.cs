@@ -63,7 +63,7 @@ namespace Sigti.Data.Base
         {
             try
             {
-                var entity =  _context.Set<T>().Find(typeof(Guid), id);
+                var entity =  _context.Set<T>().Find(id);
                 if (entity == null) AddNotification(new Notification("Delete", "Registro não localizado na base de dados!"));
                 else _context.Set<T>().Remove(entity);
                 return true;

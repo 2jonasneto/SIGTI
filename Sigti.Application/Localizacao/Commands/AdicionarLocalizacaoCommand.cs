@@ -19,7 +19,10 @@ namespace Sigti.Application
             ModificadoPor = modificadoPor;
            
         }
-
+        public AdicionarLocalizacaoCommand()
+        {
+            
+        }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string ModificadoPor { get; set; }

@@ -1,0 +1,38 @@
+﻿@using Sigti.Application
+@using Sigti.Application.Interfaces
+@inject ISnackbar Snackbar
+@inject ICommandHandler<RemoverLocalizacaoCommand> Handler
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+          
+            Remover @Localidade.Nome
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>Confirma remoção do item?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public RemoverLocalizacaoCommand Localidade { get; set; } = new();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Salvar()
+    {
+        
+        var r =await Handler.Execute(Localidade);
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+        Snackbar.Add($"Localidade {Localidade.Nome} Removida!", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(""));
+    }
+}

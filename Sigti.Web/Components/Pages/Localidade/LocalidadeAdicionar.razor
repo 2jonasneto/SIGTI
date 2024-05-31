@@ -1,0 +1,39 @@
+﻿@using Sigti.Application
+@using Sigti.Application.Interfaces
+@inject ISnackbar Snackbar
+@inject ICommandHandler<AdicionarLocalizacaoCommand> Handler
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+           
+            Adicionar Novo
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="@Localidade.Nome" Label="Nome"/>
+        <MudTextField @bind-Value="@Localidade.Descricao" Label="Descrição"  />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+  [Parameter]  public AdicionarLocalizacaoCommand Localidade { get; set; } = new();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Salvar()
+    {
+        Localidade.ModificadoPor = "SYSTEM";
+        var r =await Handler.Execute(Localidade);
+        //In a real world scenario this bool would probably be a service to delete the item from api/database
+        Snackbar.Add("Localidade adicionada!", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(""));
+    }
+}

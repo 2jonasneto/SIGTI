@@ -25,7 +25,8 @@ namespace Sigti.Application.Handlers
 
         public async Task<IEnumerable<LocalizacaoDTO>> ListaLocalizacoes()
         {
-            var lista = _mapper.Map<List<LocalizacaoDTO>>(await _data.Localizacoes.GetAllAsync());
+            var loc = await _data.Localizacoes.GetAllAsync();
+            var lista = _mapper.Map<List<LocalizacaoDTO>>(loc);
             return lista;
 
         }

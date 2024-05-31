@@ -41,6 +41,7 @@
             SetorId = setorId;
             LocalizacaoId = localizacaoId;
             Observacao = observacao;
+            DataModificacao = DateTime.Now;
         }
 
 

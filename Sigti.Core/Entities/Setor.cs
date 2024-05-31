@@ -15,6 +15,7 @@
             Descricao = descricao;
             LocalizacaoId = localizacaoId;
             ModificadoPor = modificadoPor;
+            DataModificacao = DateTime.Now;
         }
         public string Nome { get; private set; }
         public string Descricao { get; private set; }

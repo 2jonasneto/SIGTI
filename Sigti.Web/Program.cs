@@ -23,7 +23,11 @@ namespace Sigti.Web
             builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
             builder.Services.AddScoped<IComputadorQueryHandler, ComputadorQueryHandler>();
             builder.Services.AddScoped<ISetorQueryHandler, SetorQueryHandler>();
+            builder.Services.AddScoped<ILocalizacaoQueryHandler, LocalizacaoQueryHandler>();
             builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<AdicionarLocalizacaoCommand>, LocalizacaoCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<AtualizarLocalizacaoCommand>, LocalizacaoCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<RemoverLocalizacaoCommand>, LocalizacaoCommandHandler>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 

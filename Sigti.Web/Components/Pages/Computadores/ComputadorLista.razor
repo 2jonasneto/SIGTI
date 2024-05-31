@@ -10,16 +10,16 @@
 <br /> 
 <br /> 
 
-<MudDataGrid Items="@Computadores" >
+<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true">
     <Columns>
         <HierarchyColumn T="ComputadorDTO"/>
 
-        <PropertyColumn Property="x => x.HostName" Title="Nome do Host" />
-        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" />
+        <PropertyColumn Property="x => x.HostName" Title="Nome do Host"  />
+        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio"  />
         <PropertyColumn Property="x => x.LocalizacaoId" Title="Localidade" />
         <PropertyColumn Property="x => x.SetorId" Title="Setor" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" />
-        <TemplateColumn  >
+        <TemplateColumn CellStyle="float: right;" Title="Ações">
             <CellTemplate>
                 <MudStack Row>
                     <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" StartIcon="@Icons.Material.Filled.Edit">Editar</MudButton>
