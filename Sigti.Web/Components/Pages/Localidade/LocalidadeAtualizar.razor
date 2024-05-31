@@ -10,8 +10,8 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField @bind-Value="@Localidade.Nome" Label="Nome"/>
-        <MudTextField @bind-Value="@Localidade.Descricao" Label="Descrição"  />
+        <MudTextField @bind-Value="@Localidade.Nome" Variant="Variant.Outlined"  Label="Nome"/>
+        <MudTextField @bind-Value="@Localidade.Descricao" Variant="Variant.Outlined" Label="Descrição" Lines="2" />
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>

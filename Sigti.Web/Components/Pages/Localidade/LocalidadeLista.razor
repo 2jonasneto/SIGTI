@@ -22,11 +22,11 @@
         <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;"  />
         <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;" />
-        <TemplateColumn CellStyle="float: right;" Title="Ações">
+        <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate >
                 <MudStack Row >
-                    <MudButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" StartIcon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))">Editar</MudButton>
-                    <MudButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" StartIcon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))">Remover</MudButton>
+                    <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
+                    <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
@@ -48,7 +48,7 @@
     }
     async Task Adicionar()
     {
-        var options = new DialogOptions { ClassBackground = "blurryWindow" };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth=true };
         var dialog = await DialogService.ShowAsync<LocalidadeAdicionar>("Adicionar Novo",options);
         var result = await dialog.Result;
 
@@ -64,7 +64,7 @@
     {
         var upd = new AtualizarLocalizacaoCommand(dto.Id,dto.Nome, dto.Descricao, dto.ModificadoPor);
         var parameters = new DialogParameters<LocalidadeAtualizar> { { x=>x.Localidade,upd} };
-        var options = new DialogOptions { ClassBackground = "blurryWindow" };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
         var dialog = await DialogService.ShowAsync<LocalidadeAtualizar>("Atualizar",parameters,options);
         var result = await dialog.Result;
 
@@ -80,7 +80,7 @@
     {
         var upd = new RemoverLocalizacaoCommand(dto.Id, dto.Nome);
         var parameters = new DialogParameters<LocalidadeRemover> { { x => x.Localidade, upd } };
-        var options = new DialogOptions { ClassBackground = "blurryWindow" };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
         var dialog = await DialogService.ShowAsync<LocalidadeRemover>("Remover", parameters,options);
         var result = await dialog.Result;
 
