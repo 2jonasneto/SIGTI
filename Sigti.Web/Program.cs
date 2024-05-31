@@ -1,3 +1,4 @@
+using MudBlazor.Services;
 using Sigti.Web.Components;
 
 namespace Sigti.Web
@@ -11,6 +12,7 @@ namespace Sigti.Web
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddMudServices();
 
             var app = builder.Build();
 
