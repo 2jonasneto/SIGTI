@@ -1,8 +1,8 @@
 ﻿@page "/computador/lista"
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
-@inject IComputadorQueryHandler Query
-<h3>Lista de computadores</h3>
+@inject ILocalizacaoQueryHandler Query
+<h3>Lista de Localidades</h3>
 <MudDivider/>
 
 <br />
@@ -10,9 +10,9 @@
 <br /> 
 <br /> 
 
-<MudDataGrid Items="@Computadores" >
+<MudDataGrid Items="@Localizacoes" >
     <Columns>
-        <HierarchyColumn T="ComputadorDTO"/>
+        <HierarchyColumn T="LocalizacaoDTO"/>
 
         <PropertyColumn Property="x => x.HostName" Title="Nome do Host" />
         <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" />
@@ -48,10 +48,10 @@
     </ChildRowContent>
 </MudDataGrid>
 @code {
-    private IEnumerable<ComputadorDTO> Computadores = new List<ComputadorDTO>();
+    private IEnumerable<LocalizacaoDTO> Localizacoes = new List<LocalizacaoDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        Computadores = await Query.ListaCmputadores();
+        Localizacoes = await Query.ListaCmputadores();
     }
 }
