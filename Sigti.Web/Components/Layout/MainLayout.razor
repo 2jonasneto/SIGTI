@@ -6,7 +6,7 @@
 
 <MudLayout>
 
-    <MudAppBar Color="Color.Info" Dense="false" Elevation="1">
+    <MudAppBar Style="background-color:#001529" Dense="false" Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudImage Fluid="true" Src="logoSig.png" Alt="SG" Elevation="0" Width="40" />
 
@@ -15,12 +15,12 @@
         <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" Edge="Edge.End" OnClick="@((e) => ThemeChange())" />
     </MudAppBar>
 
-    <MudDrawer class="bg-dark bg-opacity-10" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
-        <NavMenu />
+    <MudDrawer Width="200px" Class="pt-3" Style="background-color:#222" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
+        <NavMenu  />
     </MudDrawer>
     <MudMainContent>
 
-        <div class="p-3">@Body</div>
+        <div class="p-5">@Body</div>
 
     </MudMainContent>
 
