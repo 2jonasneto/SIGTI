@@ -1,27 +1,35 @@
 ﻿@using Sigti.Application
 @using Sigti.Application.Interfaces
+@using Sigti.Application.Base
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AdicionarLocalizacaoCommand> Handler
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
-           
+
             Adicionar Novo
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField @bind-Value="@Localidade.Nome" Label="Nome"/>
-        <MudTextField @bind-Value="@Localidade.Descricao" Label="Descrição" Lines="2"  />
+        <EditForm @ref=form Model=Localidade OnValidSubmit="Salvar">
+            <DataAnnotationsValidator />
+
+            <MudTextField @bind-Value="@Localidade.Nome" Variant="Variant.Outlined" Label="Nome" For="@(() => Localidade.Nome)" />
+            <MudTextField @bind-Value="@Localidade.Descricao" Variant="Variant.Outlined" Label="Descrição" Lines="2" />
+
+      
+        </EditForm>
+
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton   Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton  OnClick="Cancel">Cancelar</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-
-  [Parameter]  public AdicionarLocalizacaoCommand Localidade { get; set; } = new();
+    EditForm form;
+    [Parameter] public AdicionarLocalizacaoCommand Localidade { get; set; } = new();
 
     private void Cancel()
     {
@@ -30,10 +38,29 @@
 
     private async Task Salvar()
     {
-        Localidade.ModificadoPor = "SYSTEM";
-        var r =await Handler.Execute(Localidade);
-        //In a real world scenario this bool would probably be a service to delete the item from api/database
-        Snackbar.Add("Localidade adicionada!", Severity.Success);
-        MudDialog.Close(DialogResult.Ok(""));
+        if (form.EditContext.Validate())
+        {
+            Localidade.ModificadoPor = "SYSTEM";
+            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Localidade);
+            //In a real world scenario this bool would probably be a service to delete the item from api/database
+            if (r.Success)
+            {
+                Snackbar.Add("Localidade adicionada!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+            else
+            {
+                string notes = "\n\n";
+                foreach (var item in r.Data)
+                {
+                    notes += item.Message + "\n";
+                }
+               Handler.clear
+                Snackbar.Add(r.Message + notes, Severity.Error);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+
+        }
+
     }
 }

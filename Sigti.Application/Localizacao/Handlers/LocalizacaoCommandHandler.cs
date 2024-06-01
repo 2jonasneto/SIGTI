@@ -38,11 +38,13 @@ namespace Sigti.Application.Handlers
             if (!_data.Localizacoes.Create(_mapper.Map<Localizacao>(command)))
             {
                 AddNotifications(_data.Localizacoes.GetNotifications());
+                _data.Localizacoes.NotificationsClear();
                 return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
             }
             if (!await _data.Save())
             {
-                AddNotifications(_data.Localizacoes.GetNotifications());
+                AddNotifications(_data.GetNotifications());
+                _data.NotificationsClear();
                 return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
             }
             return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
@@ -71,7 +73,7 @@ namespace Sigti.Application.Handlers
             if (!await _data.Save())
             {
                 await _data.Rollback();
-                AddNotifications(_data.Localizacoes.GetNotifications());
+                AddNotifications(_data.GetNotifications());
                 return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
             }
             if (!await _data.Commit())
@@ -91,7 +93,7 @@ namespace Sigti.Application.Handlers
             }
             if (!await _data.Save())
             {
-                AddNotifications(_data.Localizacoes.GetNotifications());
+                AddNotifications(_data.GetNotifications());
                 return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
             }
             return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
@@ -100,7 +102,10 @@ namespace Sigti.Application.Handlers
         {
             return Notifications;
         }
-
+        public void NotificationsClear()
+        {
+            Clear();
+        }
     }
 
 }

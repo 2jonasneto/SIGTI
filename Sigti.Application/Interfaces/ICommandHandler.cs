@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.Interfaces
 {
-    public interface ICommandHandler<T> where T:ICommand 
+    public interface ICommandHandler<T> where T : ICommand
     {
         Task<ICommandResult> Execute(T command);
+        void NotificationsClear();
     }
 }
