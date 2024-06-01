@@ -21,7 +21,7 @@
 
         <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;"  />
         <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
-        <PropertyColumn Property="x => x.LocalizacaoId" Title="Descrição" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.Localizacao.Nome" Title="Localização" CellStyle="width: 100%;" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;" />
         <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate >
@@ -35,7 +35,7 @@
    
 </MudDataGrid>
 @code {
-    private IEnumerable<SetorDTO> Setores = new List<SetorDTO>();
+    private IEnumerable<ListaSetorGridDTO> Setores = new List<ListaSetorGridDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,7 +44,7 @@
     }
     async Task Loading()
     {
-        Setores = await Query.ListaSetores();
+        Setores = await Query.GridSetores();
 
     }
     async Task Adicionar()
@@ -61,8 +61,9 @@
             //    Servers.RemoveAll(item => item.Id == deletedServer);
         }
     }
-    async Task Atualizar(SetorDTO dto)
+    async Task Atualizar(ListaSetorGridDTO dto)
     {
+
         var upd = new AtualizarSetorCommand(dto.Id,dto.Nome, dto.Descricao, dto.ModificadoPor,dto.LocalizacaoId);
         var parameters = new DialogParameters<SetorAtualizar> { { x=>x.Setor,upd} };
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
@@ -77,7 +78,7 @@
             //    Servers.RemoveAll(item => item.Id == deletedServer);
         }
     }
-    async Task Remover(SetorDTO dto)
+    async Task Remover(ListaSetorGridDTO dto)
     {
         var upd = new RemoverSetorCommand(dto.Id, dto.Nome);
         var parameters = new DialogParameters<SetorRemover> { { x => x.Setor, upd } };

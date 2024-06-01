@@ -32,11 +32,21 @@ namespace Sigti.Application.Handlers
         public async Task<IEnumerable<ListaSetorGridDTO>> GridSetores()
         {
             List<ListaSetorGridDTO> lista = new();
-            var setors = await _data.Setores.GetAllAsync();
+            var setors = await _data.Setores.GetAllByGrid();
 
             foreach (var setor in setors)
             {
-                lista.Add(new ListaSetorGridDTO(setor.DataModificacao, setor.Nome, setor.Descricao, setor.LocalizacaoId));
+                lista.Add(new ListaSetorGridDTO
+                {
+                    Id = setor.Id,
+                    Localizacao = _mapper.Map<LocalizacaoDTO>(setor.Localizacao),
+                    Nome = setor.Nome,
+                    Descricao = setor.Descricao,
+                    ModificadoPor = setor.ModificadoPor,
+                    DataModificacao = setor.DataModificacao,
+                    Ativo = setor.Ativo,
+                    LocalizacaoId = setor.LocalizacaoId
+                });
             }
             return lista;
 

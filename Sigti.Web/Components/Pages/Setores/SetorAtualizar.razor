@@ -17,8 +17,8 @@
             <DataAnnotationsValidator />
 
 
-            <MudTextField @bind-Value="@Setor.Nome" Label="Nome" For="@(() => Setor.Nome)" />
-            <MudSelect Label="Localização" Text="" @bind-Value="@Setor.LocalizacaoId">
+            <MudTextField @bind-Value="@Setor.Nome" Label="Nome" For="@(() => Setor.Nome)"  />
+            <MudSelect Label="Localização" Text=" " @bind-Value="@Setor.LocalizacaoId">
                 @foreach (var item in Localidades)
                 {
                     <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>

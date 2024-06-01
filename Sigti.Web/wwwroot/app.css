@@ -52,3 +52,9 @@ h1:focus {
 .blurryWindow {
     backdrop-filter: blur(10px);
 }
+input.mud-input-slot {
+    text-transform: uppercase;
+}
+textarea.mud-input-slot {
+    text-transform: uppercase;
+}
