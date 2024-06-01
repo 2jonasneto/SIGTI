@@ -1,4 +1,5 @@
 ﻿@using Sigti.Application
+@using Sigti.Application.Base
 @using Sigti.Application.Interfaces
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AtualizarLocalizacaoCommand> Handler
@@ -10,25 +11,26 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <EditForm Model=Localidade OnValidSubmit="Salvar">
+        <EditForm @ref=form Model=Localidade OnValidSubmit="Salvar">
             <DataAnnotationsValidator />
 
-            <MudTextField @bind-Value="@Localidade.Nome" Variant="Variant.Outlined" Label="Nome" For="@(() => Localidade.Nome)" />
-            <MudTextField @bind-Value="@Localidade.Descricao" Variant="Variant.Outlined" Label="Descrição" Lines="2" />
+            <MudTextField @bind-Value="@Localidade.Nome" Label="Nome" For="@(() => Localidade.Nome)" />
+            <MudTextField @bind-Value="@Localidade.Descricao" Label="Descrição" Lines="2" />
 
-            <br />
-            <MudCardActions>
-                <MudButton Class="me-3" Variant=Variant.Filled Color="Color.Tertiary" ButtonType="ButtonType.Submit">Gravar</MudButton>
-                <MudButton Variant=Variant.Filled OnClick="Cancel">Cancelar</MudButton>
 
-            </MudCardActions>
         </EditForm>
 
     </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+    </DialogActions>
 
 </MudDialog>
 @code {
-    MudForm form;
+
+    EditForm form;
+
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public AtualizarLocalizacaoCommand Localidade { get; set; } = new();
@@ -41,13 +43,29 @@
     private async Task Salvar()
     {
 
+        if (form.EditContext.Validate())
+        {
+            Localidade.ModificadoPor = "SYSTEM";
+            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Localidade);
+            if (r.Success)
+            {
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                //In a real world scenario this bool would probably be a service to delete the item from api/database
+                Snackbar.Add($"Localidade {Localidade.Nome} atualizada!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+            else
+            {
+                string notes = "\n\n";
+                foreach (var item in r.Data)
+                {
+                    notes += item.Message + "\n";
+                }
 
-        Localidade.ModificadoPor = "SYSTEM";
-        var r = await Handler.Execute(Localidade);
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-        //In a real world scenario this bool would probably be a service to delete the item from api/database
-        Snackbar.Add($"Localidade {Localidade.Nome} atualizada!", Severity.Success);
-        MudDialog.Close(DialogResult.Ok(""));
+                Snackbar.Add(r.Message + notes, Severity.Error);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
 
-    }
+        }
+    }     
 }

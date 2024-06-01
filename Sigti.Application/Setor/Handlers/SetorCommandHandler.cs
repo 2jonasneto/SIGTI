@@ -82,7 +82,10 @@ namespace Sigti.Application.Handlers
         {
             return Notifications;
         }
-        
+        public void NotificationsClear()
+        {
+            Clear();
+        }
     }
   
 }
