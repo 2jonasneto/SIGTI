@@ -1,0 +1,95 @@
+﻿@page "/setor/lista"
+
+
+@using Sigti.Application
+@using Sigti.Application.DTO
+@using Sigti.Application.Interfaces
+@inject ISetorQueryHandler Query
+@inject IDialogService DialogService
+
+<h4>Lista de Setores </h4>
+<MudDivider/>
+
+<br />
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<br />  
+<br /> 
+
+<MudDataGrid Items="@Setores" Striped="true" Bordered="true" Dense="true" Filterable="true">
+    <Columns>
+       
+
+        <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;"  />
+        <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;" />
+        <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
+            <CellTemplate >
+                <MudStack Row >
+                    <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
+                    <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+   
+</MudDataGrid>
+@code {
+    private IEnumerable<SetorDTO> Setores = new List<SetorDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+        await Loading();
+    }
+    async Task Loading()
+    {
+        Setores = await Query.ListaSetores();
+
+    }
+    async Task Adicionar()
+    {
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth=true };
+        var dialog = await DialogService.ShowAsync<SetorAdicionar>("Adicionar Novo",options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Atualizar(SetorDTO dto)
+    {
+        var upd = new AtualizarSetorCommand(dto.Id,dto.Nome, dto.Descricao, dto.ModificadoPor,dto.LocalizacaoId);
+        var parameters = new DialogParameters<SetorAtualizar> { { x=>x.Setor,upd} };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<SetorAtualizar>("Atualizar",parameters,options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Remover(SetorDTO dto)
+    {
+        var upd = new RemoverSetorCommand(dto.Id, dto.Nome);
+        var parameters = new DialogParameters<SetorRemover> { { x => x.Setor, upd } };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<SetorRemover>("Remover", parameters,options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+}

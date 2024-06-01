@@ -11,6 +11,8 @@ namespace Sigti.Application.Base
         {
           CreateMap<Computador,ComputadorDTO>();  
           CreateMap<Localizacao,LocalizacaoDTO>();  
+          CreateMap<Impressora,ImpressoraDTO>();  
+          CreateMap<Setor,SetorDTO>();  
        
           CreateMap<AdicionarComputadorCommand,Computador>();  
           CreateMap<AtualizarComputadorCommand,Computador>();  

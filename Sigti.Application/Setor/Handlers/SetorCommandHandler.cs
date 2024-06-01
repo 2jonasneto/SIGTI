@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Sigti.Application.Handlers
 {
     public class SetorCommandHandler : Notifiable<Notification>, ICommandHandler<AdicionarSetorCommand>, 
-        ICommandHandler<AtualizarSetorCommand>
+        ICommandHandler<AtualizarSetorCommand>,ICommandHandler<RemoverSetorCommand>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _data;

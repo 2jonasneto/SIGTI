@@ -3,17 +3,20 @@ using Sigti.Application.Interfaces;
 
 namespace Sigti.Application
 {
-    public class RemoverSetorCommand : Notifiable<Notification>, ICommand
+    public class RemoverSetorCommand :  ICommand
     {
         public Guid Id { get; set; }
-        public RemoverSetorCommand(Guid id)
+        public string Nome { get; set; }
+        public RemoverSetorCommand()
+        {
+                
+        }
+        public RemoverSetorCommand(Guid id, string nome)
         {
             this.Id = id;
+            Nome = nome;
         }
 
-        public void Validate()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
