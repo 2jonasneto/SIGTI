@@ -4,7 +4,7 @@
 @using Sigti.Application.Interfaces
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AtualizarSetorCommand> Handler
-@inject ISetorQueryHandler Query
+@inject ILocalizacaoQueryHandler Query
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
@@ -16,15 +16,17 @@
         <EditForm @ref=form Model=Setor OnValidSubmit="Salvar">
             <DataAnnotationsValidator />
 
+
             <MudTextField @bind-Value="@Setor.Nome" Label="Nome" For="@(() => Setor.Nome)" />
-            <MudTextField @bind-Value="@Setor.Descricao" Label="Descrição" Lines="2" />
-            <MudSelect T="SetorDTO">
+            <MudSelect Label="Localização" Text="" @bind-Value="@Setor.LocalizacaoId">
                 @foreach (var item in Localidades)
                 {
-                    <MudSelectItem Value=item.Nome />
-                
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
                 }
             </MudSelect>
+            <MudTextField @bind-Value="@Setor.Descricao" Label="Descrição" Lines="2" />
+
 
         </EditForm>
 
@@ -42,11 +44,11 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public AtualizarSetorCommand Setor { get; set; } = new();
-    public List<SetorDTO> Localidades { get; set; } = new();
+    public List<LocalizacaoDTO> Localidades { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        Localidades = (await Query.ListaSetores()).ToList();
+        Localidades = (await Query.ListaLocalizacoes()).ToList();
     }
     private void Cancel()
     {

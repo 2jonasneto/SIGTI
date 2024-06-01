@@ -17,9 +17,13 @@ namespace Sigti.Application.Base
           CreateMap<AdicionarComputadorCommand,Computador>();  
           CreateMap<AtualizarComputadorCommand,Computador>();  
           CreateMap<AdicionarLocalizacaoCommand,Localizacao>();  
-          CreateMap<AtualizarLocalizacaoCommand,Localizacao>();  
-          
+          CreateMap<AtualizarLocalizacaoCommand,Localizacao>();
+            CreateMap<AdicionarSetorCommand, Setor>();
+            CreateMap<AtualizarSetorCommand, Setor>();
+            CreateMap<AdicionarImpressoraCommand, Impressora>();
+            CreateMap<AtualizarImpressoraCommand, Impressora>();
+
         }
-       
+
     }
 }
