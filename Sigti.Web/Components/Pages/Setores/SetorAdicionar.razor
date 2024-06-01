@@ -17,14 +17,15 @@
             <DataAnnotationsValidator />
 
             <MudTextField @bind-Value="@Setor.Nome"  Label="Nome" For="@(() => Setor.Nome)" />
-            <MudTextField @bind-Value="@Setor.Descricao"  Label="Descrição" Lines="2" />
-            <MudSelect T="SetorDTO">
-                @foreach (var item in Setores)
+            <MudSelect  Label="Localização" Text="" @bind-Value="@Setor.LocalizacaoId" >
+                @foreach (var item in Localizacao)
                 {
-                    <MudSelectItem Value=@item.Nome />
+                    <MudSelectItem  Value=@item.Id>@item.Nome</MudSelectItem>
 
                 }
             </MudSelect>
+            <MudTextField @bind-Value="@Setor.Descricao"  Label="Descrição" Lines="2" />
+           
       
         </EditForm>
 
@@ -37,6 +38,8 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     EditForm form;
+  
+
     [Parameter] public AdicionarSetorCommand Setor { get; set; } = new();
     public List<LocalizacaoDTO> Localizacao { get; set; } = new();
 
@@ -68,12 +71,13 @@
                 {
                     notes += item.Message + "\n";
                 }
-               
+
                 Snackbar.Add(r.Message + notes, Severity.Error);
                 MudDialog.Close(DialogResult.Ok(""));
             }
 
         }
-
+      
     }
+  
 }
