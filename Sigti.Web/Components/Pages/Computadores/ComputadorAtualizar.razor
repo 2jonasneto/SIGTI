@@ -61,13 +61,14 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public AtualizarComputadorCommand Computador { get; set; } = new();
-    public List<LocalizacaoDTO> Localidades { get; set; } = new();
-    public List<SetorDTO> Setores { get; set; } = new();
+    [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    [Parameter] public List<SetorDTO> Setores { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        Localidades = (await local.ListaLocalizacoes()).ToList();
-        Setores = (await setor.ListaSetores()).ToList();
+
+        //  Setores = (await setor.ListaSetores()).ToList();
+        //Localidades = (await local.ListaLocalizacoes()).ToList();
     }
     private void Cancel()
     {

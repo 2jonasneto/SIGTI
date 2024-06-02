@@ -4,29 +4,30 @@
 @using Sigti.Application.Interfaces
 @inject IComputadorQueryHandler Query
 @inject IDialogService DialogService
-
+@inject ILocalizacaoQueryHandler local
+@inject ISetorQueryHandler setor
 <h3>Lista de computadores</h3>
-<MudDivider/>
+<MudDivider />
 
 <br />
 <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
 <br />
-<br /> 
+<br />
 
 <MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true">
     <Columns>
-        <HierarchyColumn T="ListaComputadorGridDTO"/>
+        <HierarchyColumn T="ListaComputadorGridDTO" />
 
-        <PropertyColumn Property="x => x.HostName" Title="Nome do Host"  />
-        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio"  />
+        <PropertyColumn Property="x => x.HostName" Title="Nome do Host" />
+        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" />
         <PropertyColumn Property="x => x.Localizacao" Title="Localidade" />
         <PropertyColumn Property="x => x.Setor" Title="Setor" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" />
         <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate>
                 <MudStack Row>
-                    <MudIconButton  Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
-                    <MudIconButton  Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
@@ -35,7 +36,7 @@
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText >**** Mais Detalhes ****</MudText>
+                    <MudText>**** Mais Detalhes ****</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
@@ -53,11 +54,12 @@
 </MudDataGrid>
 @code {
     private IEnumerable<ListaComputadorGridDTO> Computadores = new List<ListaComputadorGridDTO>();
-
+    [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    [Parameter] public List<SetorDTO> Setores { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
         await Loading();
-        
+
     }
 
     async Task Adicionar()
@@ -77,14 +79,20 @@
     async Task Loading()
     {
         Computadores = await Query.GridComputadores();
-
+        Setores = (await setor.ListaSetores()).ToList();
+        Localidades = (await local.ListaLocalizacoes()).ToList();
     }
     async Task Atualizar(ListaComputadorGridDTO dto)
     {
 
-        var upd = new AtualizarComputadorCommand(dto.Id, dto.HostName,dto.Processador,dto.Memoria,dto.Disco,dto.Ip,dto.Anydesk,dto.Grupos,
-            dto.UltimoUsuarioLogado,dto.Patrimonio,dto.SistemaOperacional,dto.ModificadoPor,dto.SetorId,dto.LocalizacaoId,dto.Observacao);
-        var parameters = new DialogParameters<ComputadorAtualizar> { { x => x.Computador, upd } };
+        var upd = new AtualizarComputadorCommand(dto.Id, dto.HostName, dto.Processador, dto.Memoria, dto.Disco, dto.Ip, dto.Anydesk, dto.Grupos,
+            dto.UltimoUsuarioLogado, dto.Patrimonio, dto.SistemaOperacional, dto.ModificadoPor, dto.SetorId, dto.LocalizacaoId, dto.Observacao);
+        var parameters = new DialogParameters<ComputadorAtualizar>
+        {
+            { x => x.Computador, upd },
+            { s => s.Setores, Setores },
+            { l => l.Localidades, Localidades } 
+        };
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
         var dialog = await DialogService.ShowAsync<ComputadorAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
