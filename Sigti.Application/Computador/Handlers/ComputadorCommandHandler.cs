@@ -58,16 +58,51 @@ namespace Sigti.Application.Handlers
 
         public async Task<ICommandResult> Execute(AtualizarComputadorCommand command)
         {
-
-            if (!_data.Computadores.Create(_mapper.Map<Computador>(command)))
+            var computador = await _data.Computadores.GetByIdAsync(command.Id);
+            if (computador == null)
             {
-                AddNotifications(_data.Computadores.GetNotifications());
-                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                return new GenericCommandResult(false, "Registro não existe na base", Notifications);
+
             }
+            computador.Atualizar(
+                hostName:command.HostName, 
+                patrimonio:command.Patrimonio,
+                processador:command.Processador,
+                memoria:command.Memoria,
+                disco:command.Memoria,
+                ip:command.Memoria,
+                anydesk:command.Memoria,
+                grupos:command.Memoria,
+                observacao:command.Memoria,
+                ultimoUsuarioLogado:command.Memoria,
+                sistemaOperacional:command.SistemaOperacional,
+                modificadoPor:command.ModificadoPor,
+                setorId:command.SetorId,
+                localizacaoId:command.LocalizacaoId
+                
+                );
+            if (!await _data.Init())
+            {
+                AddNotifications(_data.GetNotifications());
+                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+            }
+            if (!_data.Computadores.Update(computador))
+            {
+                AddNotifications(_data.Localizacoes.GetNotifications());
+                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+            }
+
+
+           
             if (!await _data.Save())
             {
                 AddNotifications(_data.Computadores.GetNotifications());
                 return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+            }
+            if (!await _data.Commit())
+            {
+                AddNotifications(_data.GetNotifications());
+                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
             }
             return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
         }

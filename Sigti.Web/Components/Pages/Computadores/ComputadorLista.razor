@@ -64,7 +64,7 @@
 
     async Task Adicionar()
     {
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium };
         var dialog = await DialogService.ShowAsync<ComputadorAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
 
@@ -93,7 +93,7 @@
             { s => s.Setores, Setores },
             { l => l.Localidades, Localidades } 
         };
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true,MaxWidth=MaxWidth.Medium};
         var dialog = await DialogService.ShowAsync<ComputadorAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
 

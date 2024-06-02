@@ -52,9 +52,15 @@ h1:focus {
 .blurryWindow {
     backdrop-filter: blur(10px);
 }
+.titleclass {
+    background-color: #42658b !important;
+    color:white;
+}
+
 input.mud-input-slot {
     text-transform: uppercase;
 }
 textarea.mud-input-slot {
     text-transform: uppercase;
 }
+
