@@ -15,7 +15,7 @@
 <br />  
 <br /> 
 
-<MudDataGrid Items="@Setores" Striped="true" Bordered="true" Dense="true" Filterable="true" HeaderClass="title-gridclass">
+<MudDataGrid Items="@Setores" Striped="true" Bordered="true" Dense="true" Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
     <Columns>
        
 
@@ -32,7 +32,9 @@
             </CellTemplate>
         </TemplateColumn>
     </Columns>
-   
+    <PagerContent>
+        <MudDataGridPager T="ListaSetorGridDTO" />
+    </PagerContent>
 </MudDataGrid>
 @code {
     private IEnumerable<ListaSetorGridDTO> Setores = new List<ListaSetorGridDTO>();

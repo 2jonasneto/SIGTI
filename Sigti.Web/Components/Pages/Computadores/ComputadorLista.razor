@@ -14,7 +14,7 @@
 <br />
 <br />
 
-<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true" HeaderClass="title-gridclass">
+<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true" Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
     <Columns>
         <HierarchyColumn T="ListaComputadorGridDTO" />
 
@@ -51,6 +51,9 @@
             </MudCardContent>
         </MudCard>
     </ChildRowContent>
+    <PagerContent>
+        <MudDataGridPager T="ListaComputadorGridDTO" />
+    </PagerContent>
 </MudDataGrid>
 @code {
     private IEnumerable<ListaComputadorGridDTO> Computadores = new List<ListaComputadorGridDTO>();
