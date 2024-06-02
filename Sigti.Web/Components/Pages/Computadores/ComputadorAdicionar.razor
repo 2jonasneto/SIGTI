@@ -54,7 +54,7 @@
                 </MudItem>
 
                 <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Ip" Label="Ip" For="@(() => Computador.Ip)" />
+                    <MudTextField Mask="@ipv4Mask" @bind-Value="@Computador.Ip" Label="Ip" For="@(() => Computador.Ip)" />
                 </MudItem>
 
                 <MudItem xs="4">
@@ -90,7 +90,7 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     EditForm form;
-
+    public IMask ipv4Mask = RegexMask.IPv4();
 
     [Parameter] public AdicionarComputadorCommand Computador { get; set; } = new();
     public List<SetorDTO> Setores { get; set; } = new();
