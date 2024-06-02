@@ -11,18 +11,18 @@
 <MudDivider/>
 
 <br />
-<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
 <br />  
 <br /> 
 
-<MudDataGrid Items="@Setores" Striped="true" Bordered="true" Dense="true" Filterable="true">
+<MudDataGrid Items="@Setores" Striped="true" Bordered="true" Dense="true" Filterable="true" HeaderClass="title-gridclass">
     <Columns>
        
 
         <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;"  />
         <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
         <PropertyColumn Property="x => x.Localizacao.Nome" Title="Localização" CellStyle="width: 100%;" />
-        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 70%;" />
         <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate >
                 <MudStack Row >
