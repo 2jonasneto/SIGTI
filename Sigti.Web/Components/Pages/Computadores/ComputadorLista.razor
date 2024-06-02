@@ -14,7 +14,8 @@
 <br />
 <br />
 
-<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true" Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
+<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true" FilterCaseSensitivity=DataGridFilterCaseSensitivity.CaseInsensitive
+    Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
     <Columns>
         <HierarchyColumn T="ListaComputadorGridDTO" />
 
@@ -23,7 +24,7 @@
         <PropertyColumn Property="x => x.Localizacao" Title="Localidade" />
         <PropertyColumn Property="x => x.Setor" Title="Setor" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" />
-        <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
+        <TemplateColumn  Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate>
                 <MudStack Row>
                     <MudIconButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>

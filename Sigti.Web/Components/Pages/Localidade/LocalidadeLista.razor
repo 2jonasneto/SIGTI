@@ -15,14 +15,15 @@
 <br /> 
 <br /> 
 
-<MudDataGrid Items="@Localizacoes" Striped="true" Bordered="true" Dense="true" Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
+<MudDataGrid Items="@Localizacoes" Striped="true" Bordered="true" Dense="true" FilterCaseSensitivity=DataGridFilterCaseSensitivity.CaseInsensitive
+    Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
     <Columns>
        
 
         <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;"  />
         <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;" />
-        <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
+        <TemplateColumn Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate >
                 <MudStack Row >
                     <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
@@ -32,7 +33,7 @@
         </TemplateColumn>
     </Columns>
     <PagerContent>
-        <MudDataGridPager T="ListaLocalizacaoGridDTO" />
+        <MudDataGridPager T="LocalizacaoDTO" />
     </PagerContent>
 </MudDataGrid>
 @code {
