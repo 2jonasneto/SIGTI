@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Sigti.Application.Handlers
 {
-    public class ComputadorQueryHandler:IComputadorQueryHandler
+    public class ComputadorQueryHandler : IComputadorQueryHandler
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _data;
@@ -25,21 +25,44 @@ namespace Sigti.Application.Handlers
 
         public async Task<IEnumerable<ComputadorDTO>> ListaCmputadores()
         {
-            var lista=_mapper.Map<List<ComputadorDTO>>(await _data.Computadores.GetAllAsync());
+            var lista = _mapper.Map<List<ComputadorDTO>>(await _data.Computadores.GetAllAsync());
             return lista;
 
         }
         public async Task<IEnumerable<ListaComputadorGridDTO>> GridComputadores()
         {
             List<ListaComputadorGridDTO> lista = new();
-            var pcs =await _data.Computadores.GetAllAsync();
+            var pcs = await _data.Computadores.GetAllByGrid();
 
             foreach (var pc in pcs)
             {
-                lista.Add(new ListaComputadorGridDTO(pc.DataModificacao, pc.HostName, pc.Patrimonio, pc.SetorId, pc.LocalizacaoId));
+                lista.Add(
+                    new ListaComputadorGridDTO(
+                
+                    id : pc.Id,
+                    hostName : pc.HostName,
+                    patrimonio : pc.Patrimonio,
+                    ip : pc.Ip,
+                    anydesk : pc.Anydesk,
+                    processador : pc.Processador,
+                    memoria : pc.Memoria,
+                    disco : pc.Disco,
+                    grupos : pc.Grupos,
+                    ativo : pc.Ativo,
+                    modificadoPor : pc.ModificadoPor,
+                    dataModificacao : pc.DataModificacao,
+                    sistemaOperacional : pc.SistemaOperacional,
+                    ultimoUsuarioLogado : pc.UltimoUsuarioLogado,
+                    setor : pc.Setor.Nome,
+                    setorId : pc.SetorId,
+                    localizacaoId : pc.LocalizacaoId,
+                    localizacao : pc.Localizacao.Nome,
+                    observacao : pc.Observacao
+
+                ));
             }
             return lista;
-            
+
         }
         public async Task<ComputadorDTO> GetById(Guid id)
         {
@@ -48,9 +71,9 @@ namespace Sigti.Application.Handlers
 
         }
 
-        
 
 
-      
+
+
     }
 }

@@ -11,6 +11,10 @@ namespace Sigti.Application
 
     public class AdicionarComputadorCommand : Notifiable<Notification> , ICommand
     {
+        public AdicionarComputadorCommand()
+        {
+            
+        }
         public AdicionarComputadorCommand(string hostName, string processador, string memoria,
                string disco, string ip, string anydesk, string grupos,
                string ultimoUsuarioLogado, string patrimonio, string sistemaOperacional,

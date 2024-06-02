@@ -5,11 +5,16 @@ namespace Sigti.Application
 {
     public class AtualizarComputadorCommand : Notifiable<Notification>,  ICommand
     {
-        public AtualizarComputadorCommand(string hostName, string processador, string memoria,
+        public AtualizarComputadorCommand()
+        {
+            
+        }
+        public AtualizarComputadorCommand(Guid id,string hostName, string processador, string memoria,
                string disco, string ip, string anydesk, string grupos,
                string ultimoUsuarioLogado, string patrimonio, string sistemaOperacional,
                string modificadoPor, Guid setorId, Guid localizacaoId, string observacao)
         {
+            Id = id;
             HostName = hostName;
             Processador = processador;
             Memoria = memoria;
@@ -26,6 +31,7 @@ namespace Sigti.Application
             Observacao = observacao;
         }
 
+        public Guid Id { get; set; }
         public string ModificadoPor { get; set; }
         public string HostName { get; set; }
         public string Processador { get; set; }

@@ -1,29 +1,32 @@
 ﻿@page "/computador/lista"
+@using Sigti.Application
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
 @inject IComputadorQueryHandler Query
+@inject IDialogService DialogService
+
 <h3>Lista de computadores</h3>
 <MudDivider/>
 
 <br />
-<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Info" StartIcon="@Icons.Material.Filled.Add">Adicionar Novo</MudButton>
-<br /> 
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<br />
 <br /> 
 
 <MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true">
     <Columns>
-        <HierarchyColumn T="ComputadorDTO"/>
+        <HierarchyColumn T="ListaComputadorGridDTO"/>
 
         <PropertyColumn Property="x => x.HostName" Title="Nome do Host"  />
         <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio"  />
-        <PropertyColumn Property="x => x.LocalizacaoId" Title="Localidade" />
-        <PropertyColumn Property="x => x.SetorId" Title="Setor" />
+        <PropertyColumn Property="x => x.Localizacao" Title="Localidade" />
+        <PropertyColumn Property="x => x.Setor" Title="Setor" />
         <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" />
-        <TemplateColumn CellStyle="float: right;" Title="Ações">
+        <TemplateColumn CellStyle="float: right;" Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate>
                 <MudStack Row>
-                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" StartIcon="@Icons.Material.Filled.Edit">Editar</MudButton>
-                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" StartIcon="@Icons.Material.Filled.Delete">Remover</MudButton>
+                    <MudIconButton  Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
+                    <MudIconButton  Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
@@ -32,26 +35,82 @@
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText >@context.Item.Processador</MudText>
+                    <MudText >**** Mais Detalhes ****</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
-                <MudText> @context.Item.Memoria</MudText>
-                <MudText> @context.Item.Disco</MudText>
-                <MudText> @context.Item.Ip</MudText>
-                <MudText> @context.Item.SistemaOperacional</MudText>
-                <MudText> @context.Item.Anydesk</MudText>
-                <MudText> @context.Item.Grupos</MudText>
-                <MudText> @context.Item.Observacao</MudText>
+                <MudText>Processador: @context.Item.Processador</MudText>
+                <MudText>Memória: @context.Item.Memoria</MudText>
+                <MudText>Discos: @context.Item.Disco</MudText>
+                <MudText>Ip: @context.Item.Ip</MudText>
+                <MudText>S.O: @context.Item.SistemaOperacional</MudText>
+                <MudText>Anydesk: @context.Item.Anydesk</MudText>
+                <MudText>Grupos: @context.Item.Grupos</MudText>
+                <MudText>Observação: @context.Item.Observacao</MudText>
             </MudCardContent>
         </MudCard>
     </ChildRowContent>
 </MudDataGrid>
 @code {
-    private IEnumerable<ComputadorDTO> Computadores = new List<ComputadorDTO>();
+    private IEnumerable<ListaComputadorGridDTO> Computadores = new List<ListaComputadorGridDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        Computadores = await Query.ListaCmputadores();
+        await Loading();
+        
+    }
+
+    async Task Adicionar()
+    {
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<ComputadorAdicionar>("Adicionar Novo", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Loading()
+    {
+        Computadores = await Query.GridComputadores();
+
+    }
+    async Task Atualizar(ListaComputadorGridDTO dto)
+    {
+
+        var upd = new AtualizarComputadorCommand(dto.Id, dto.HostName,dto.Processador,dto.Memoria,dto.Disco,dto.Ip,dto.Anydesk,dto.Grupos,
+            dto.UltimoUsuarioLogado,dto.Patrimonio,dto.SistemaOperacional,dto.ModificadoPor,dto.SetorId,dto.LocalizacaoId,dto.Observacao);
+        var parameters = new DialogParameters<ComputadorAtualizar> { { x => x.Computador, upd } };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<ComputadorAtualizar>("Atualizar", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Remover(ListaComputadorGridDTO dto)
+    {
+        var upd = new RemoverComputadorCommand(dto.Id, dto.HostName);
+        var parameters = new DialogParameters<ComputadorRemover> { { x => x.Computador, upd } };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<ComputadorRemover>("Remover", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
     }
 }

@@ -11,6 +11,6 @@ namespace Sigti.Core.Repositories
 {
     public interface IComputadorRepository:IGenericRepository<Computador>
     {
-      
+        Task<List<Computador>> GetAllByGrid();
     }
 }

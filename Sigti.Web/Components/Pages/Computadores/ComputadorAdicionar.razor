@@ -1,0 +1,104 @@
+﻿@using Sigti.Application
+@using Sigti.Application.DTO
+@using Sigti.Application.Interfaces
+@using Sigti.Application.Base
+@inject ISnackbar Snackbar
+@inject ICommandHandler<AdicionarComputadorCommand> Handler
+@inject ISetorQueryHandler setor
+@inject ILocalizacaoQueryHandler local
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+
+            Adicionar Novo
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <EditForm @ref=form Model=Computador OnValidSubmit="Salvar">
+            <DataAnnotationsValidator />
+
+            <MudTextField @bind-Value="@Computador.HostName" Label="Nome do Host" For="@(() => Computador.HostName)" />
+            <MudSelect Label="Localização" Text=" " @bind-Value="@Computador.LocalizacaoId">
+                @foreach (var item in Localidades)
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
+            <MudSelect Label="Setor" Text=" " @bind-Value="@Computador.SetorId">
+                @foreach (var item in Setores.Where(x => x.LocalizacaoId == Computador.LocalizacaoId))
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
+            <MudTextField @bind-Value="@Computador.Processador" Label="Processador" For="@(() => Computador.Processador)" />
+            <MudTextField @bind-Value="@Computador.Memoria" Label="Memória" For="@(() => Computador.Memoria)" />
+            <MudTextField @bind-Value="@Computador.Disco" Label="Discos" For="@(() => Computador.Disco)" />
+            <MudTextField @bind-Value="@Computador.Ip" Label="Ip" For="@(() => Computador.Ip)" />
+            <MudTextField @bind-Value="@Computador.Anydesk" Label="Anydesk" For="@(() => Computador.Anydesk)" />
+            <MudTextField @bind-Value="@Computador.Grupos" Label="Grupos" For="@(() => Computador.Grupos)" />
+            <MudTextField @bind-Value="@Computador.Patrimonio" Label="Patrimônio" For="@(() => Computador.Patrimonio)" />
+            <MudTextField @bind-Value="@Computador.SistemaOperacional" Label="Sistema" For="@(() => Computador.SistemaOperacional)" />
+            <MudTextField @bind-Value="@Computador.Observacao" Label="Observação" For="@(() => Computador.Observacao)" Lines="2" />
+
+
+
+
+        </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton   Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton  OnClick="Cancel">Cancelar</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    EditForm form;
+
+
+    [Parameter] public AdicionarComputadorCommand Computador { get; set; } = new();
+    public List<SetorDTO> Setores { get; set; } = new();
+    public List<LocalizacaoDTO> Localidades { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Localidades = (await local.ListaLocalizacoes()).ToList();
+        Setores = (await setor.ListaSetores()).ToList();
+    }
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Salvar()
+    {
+        if (form.EditContext.Validate())
+        {
+            Computador.ModificadoPor = "SYSTEM";
+            Computador.UltimoUsuarioLogado = "";
+            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Computador);
+            //In a real world scenario this bool would probably be a service to delete the item from api/database
+            if (r.Success)
+            {
+                Snackbar.Add("Computador adicionado!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+            else
+            {
+                string notes = "\n\n";
+                foreach (var item in r.Data)
+                {
+                    notes += item.Message + "\n";
+                }
+
+                Snackbar.Add(r.Message + notes, Severity.Error);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+
+        }
+      
+    }
+  
+}

@@ -25,6 +25,8 @@ namespace Sigti.Web
             builder.Services.AddScoped<ISetorQueryHandler, SetorQueryHandler>();
             builder.Services.AddScoped<ILocalizacaoQueryHandler, LocalizacaoQueryHandler>();
             builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<AtualizarComputadorCommand>, ComputadorCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<RemoverComputadorCommand>, ComputadorCommandHandler>();
            
             builder.Services.AddScoped<ICommandHandler<AdicionarLocalizacaoCommand>, LocalizacaoCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<AtualizarLocalizacaoCommand>, LocalizacaoCommandHandler>();
