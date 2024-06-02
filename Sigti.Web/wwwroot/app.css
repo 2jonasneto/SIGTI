@@ -57,6 +57,11 @@ h1:focus {
     color:white;
 }
 
+.title-gridclass {
+    background-color: #508eeb !important;
+    color: white;
+}
+
 input.mud-input-slot {
     text-transform: uppercase;
 }

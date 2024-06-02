@@ -10,11 +10,11 @@
 <MudDivider />
 
 <br />
-<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Info" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
 <br />
 <br />
 
-<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true">
+<MudDataGrid Items="@Computadores" Striped="true" Bordered="true" Dense="true" HeaderClass="title-gridclass">
     <Columns>
         <HierarchyColumn T="ListaComputadorGridDTO" />
 
