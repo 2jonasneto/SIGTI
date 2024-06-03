@@ -1,0 +1,126 @@
+﻿@page "/impressora/lista"
+@using Sigti.Application
+@using Sigti.Application.DTO
+@using Sigti.Application.Interfaces
+@inject IImpressoraQueryHandler Query
+@inject IDialogService DialogService
+@inject ILocalizacaoQueryHandler local
+@inject ISetorQueryHandler setor
+<h3>Lista de impressoras</h3>
+<MudDivider />
+
+<br />
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<br />
+<br />
+
+<MudDataGrid Items="@Impressoras" Striped="true" Bordered="true" Dense="true" FilterCaseSensitivity=DataGridFilterCaseSensitivity.CaseInsensitive
+             Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25" >
+    <Columns>
+        <HierarchyColumn T="ListaImpressoraGridDTO" />
+
+        <PropertyColumn Property="x => x.Modelo" Title="Modelo" CellStyle="width:100%" />
+        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" />
+        <PropertyColumn Property="x => x.AlugadoStr" Title="Alugado"   />
+        <PropertyColumn Property="x => x.Localizacao" Title="Localidade" />
+        <PropertyColumn Property="x => x.Setor" Title="Setor" />
+        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" Sortable="false" />
+        <TemplateColumn Title="Ações" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudIconButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <ChildRowContent>
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>**** Mais Detalhes ****</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>Tipo: @context.Item.Tipo.ToString()</MudText>
+                    <MudText>Conexão: @context.Item.Conexao.ToString()</MudText>
+                    <MudText>Ip: @context.Item.Ip</MudText>
+                    <MudText>Observação: @context.Item.Observacao</MudText>
+                </MudCardContent>
+            </MudCard>
+        </ChildRowContent>
+        <PagerContent>
+            <MudDataGridPager T="ListaImpressoraGridDTO" />
+        </PagerContent>
+    </MudDataGrid>
+    @code {
+    private IEnumerable<ListaImpressoraGridDTO> Impressoras = new List<ListaImpressoraGridDTO>();
+    public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    public List<SetorDTO> Setores { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        await Loading();
+
+    }
+
+    async Task Adicionar()
+    {
+        
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium };
+        var dialog = await DialogService.ShowAsync<ImpressoraAdicionar>("Adicionar Novo", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Loading()
+    {
+        Impressoras = await Query.GridImpressoras();
+        Setores = (await setor.ListaSetores()).ToList();
+        Localidades = (await local.ListaLocalizacoes()).ToList();
+    }
+    async Task Atualizar(ListaImpressoraGridDTO dto)
+    {
+
+        var upd = new AtualizarImpressoraCommand(dto.Id, dto.Modelo, dto.Patrimonio, dto.Alugado, dto.SetorId, dto.LocalizacaoId, dto.Observacao,
+            dto.Ip, dto.Conexao, dto.Tipo, dto.ModificadoPor);
+        var parameters = new DialogParameters<ImpressoraAtualizar>
+        {
+            { x => x.Impressora, upd },
+            { s => s.Setores, Setores },
+            { l => l.Localidades, Localidades }
+        };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium };
+        var dialog = await DialogService.ShowAsync<ImpressoraAtualizar>("Atualizar", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Remover(ListaImpressoraGridDTO dto)
+    {
+        var upd = new RemoverImpressoraCommand(dto.Id, dto.Modelo);
+        var parameters = new DialogParameters<ImpressoraRemover> { { x => x.Impressora, upd } };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<ImpressoraRemover>("Remover", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+}

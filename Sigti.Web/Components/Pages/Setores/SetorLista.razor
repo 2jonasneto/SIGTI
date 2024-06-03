@@ -6,6 +6,7 @@
 @using Sigti.Application.Interfaces
 @inject ISetorQueryHandler Query
 @inject IDialogService DialogService
+@inject ILocalizacaoQueryHandler local
 
 <h4>Lista de Setores </h4>
 <MudDivider />
@@ -39,7 +40,7 @@
 </MudDataGrid>
 @code {
     private IEnumerable<ListaSetorGridDTO> Setores = new List<ListaSetorGridDTO>();
-
+    public List<LocalizacaoDTO> Localidades { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
 
@@ -48,10 +49,11 @@
     async Task Loading()
     {
         Setores = await Query.GridSetores();
-
+        Localidades = (await local.ListaLocalizacoes()).ToList();
     }
     async Task Adicionar()
     {
+      
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
         var dialog = await DialogService.ShowAsync<SetorAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
@@ -66,9 +68,9 @@
     }
     async Task Atualizar(ListaSetorGridDTO dto)
     {
-
+       
         var upd = new AtualizarSetorCommand(dto.Id, dto.Nome, dto.Descricao, dto.ModificadoPor, dto.LocalizacaoId);
-        var parameters = new DialogParameters<SetorAtualizar> { { x => x.Setor, upd } };
+        var parameters = new DialogParameters<SetorAtualizar> { { x => x.Setor, upd }, { l => l.Localidades, Localidades } };
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
         var dialog = await DialogService.ShowAsync<SetorAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;

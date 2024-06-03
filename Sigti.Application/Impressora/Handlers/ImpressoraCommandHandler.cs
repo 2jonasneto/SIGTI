@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Sigti.Application.Handlers
 {
     public class ImpressoraCommandHandler : Notifiable<Notification>, ICommandHandler<AdicionarImpressoraCommand>, 
-        ICommandHandler<AtualizarImpressoraCommand>
+        ICommandHandler<AtualizarImpressoraCommand>, ICommandHandler<RemoverImpressoraCommand>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _data;

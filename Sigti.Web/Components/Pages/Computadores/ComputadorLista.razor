@@ -19,11 +19,11 @@
     <Columns>
         <HierarchyColumn T="ListaComputadorGridDTO" />
 
-        <PropertyColumn Property="x => x.HostName" Title="Nome do Host" />
-        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" />
-        <PropertyColumn Property="x => x.Localizacao" Title="Localidade" />
-        <PropertyColumn Property="x => x.Setor" Title="Setor" />
-        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" />
+        <PropertyColumn Property="x => x.HostName" Title="Nome do Host" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.Patrimonio" Title="Patrimônio" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.Localizacao" Title="Localidade" CellStyle="width: 100%;"  />
+        <PropertyColumn Property="x => x.Setor" Title="Setor" CellStyle="width: 100%;"  />
+        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;"  />
         <TemplateColumn  Title="Ações" Filterable="false" Sortable="false">
             <CellTemplate>
                 <MudStack Row>

@@ -1,0 +1,157 @@
+﻿@using Sigti.Application
+@using Sigti.Application.DTO
+@using Sigti.Application.Interfaces
+@using Sigti.Application.Base
+@inject ISnackbar Snackbar
+@inject ICommandHandler<AdicionarImpressoraCommand> Handler
+@inject ISetorQueryHandler setor
+@inject ILocalizacaoQueryHandler local
+<MudDialog TitleClass="titleclass">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+
+            Adicionar Novo
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <EditForm @ref=form Model=Impressora OnValidSubmit="Salvar">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="4">
+                    <MudTextField @bind-Value="@Impressora.Modelo" Label="Modelo" For="@(() => Impressora.Modelo)" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudTextField @bind-Value="@Impressora.Patrimonio" Label="Patrimônio" For="@(() => Impressora.Patrimonio)" />
+                </MudItem>
+              
+                <MudItem xs="4" Class="pt-3">
+                    <MudCheckBox @bind-Value="@Impressora.Alugado" Label="Alugado" For="@(() => Impressora.Alugado)" LabelPosition="LabelPosition.Start"  />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSelect Label="Localização" Text="" @bind-Value="@Impressora.LocalizacaoId">
+                        @foreach (var item in Localidades)
+                        {
+                            <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSelect Label="Setor" Text="" @bind-Value="@Impressora.SetorId">
+                        @foreach (var item in Setores.Where(x => x.LocalizacaoId == Impressora.LocalizacaoId))
+                        {
+                            <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                        }
+                    </MudSelect>
+                </MudItem>
+
+               
+                <MudItem xs="4">
+                    <MudTextField Mask="@ipv4Mask" @bind-Value="@Impressora.Ip" Label="Ip" For="@(() => Impressora.Ip)" />
+                </MudItem>
+
+
+                <MudItem xs="4">
+                    <MudSelect Label="Tipo" Text=" " @bind-Value="@Impressora.Tipo">
+                        @foreach (var item in Tipos)
+                        {
+                            <MudSelectItem Value=@((ETipoImpressora)item.Key)>@item.Value</MudSelectItem>
+
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="4">
+                    <MudSelect Label="Conexão" Text=" " @bind-Value="@Impressora.Conexao">
+                        @foreach (var item in Conexoes)
+                        {
+                            <MudSelectItem Value=@((ETipoConexaoImpressora)item.Key)>@item.Value</MudSelectItem>
+
+                        }
+                    </MudSelect>
+                </MudItem>
+
+
+
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="@Impressora.Observacao" Label="Observação" For="@(() => Impressora.Observacao)" Lines="2" />
+                </MudItem>
+
+
+            </MudGrid>
+
+
+        </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    EditForm form;
+    public IMask ipv4Mask = RegexMask.IPv4();
+    [Parameter] public AdicionarImpressoraCommand Impressora { get; set; } = new();
+    [Parameter] public List<SetorDTO> Setores { get; set; } = new();
+    [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    public Dictionary<int,string> Tipos { get; set; } = new();
+    public Dictionary<int,string> Conexoes { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+          Localidades = (await local.ListaLocalizacoes()).ToList();
+          Setores = (await setor.ListaSetores()).ToList();
+
+        @foreach (ETipoImpressora item in Enum.GetValues(typeof(ETipoImpressora)))
+        {
+           
+                Tipos.Add((int)item, item.ToString());
+            
+
+        }
+        @foreach (ETipoConexaoImpressora item in Enum.GetValues(typeof(ETipoConexaoImpressora)))
+        {
+
+            Conexoes.Add((int)item, item.ToString());
+
+
+        }
+
+    }
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Salvar()
+    {
+        if (form.EditContext.Validate())
+        {
+            Impressora.ModificadoPor = "SYSTEM";
+            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Impressora);
+            //In a real world scenario this bool would probably be a service to delete the item from api/database
+            if (r.Success)
+            {
+                Snackbar.Add("Impressora adicionado!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+            else
+            {
+                string notes = "\n\n";
+                foreach (var item in r.Data)
+                {
+                    notes += item.Message + "\n";
+                }
+
+                Snackbar.Add(r.Message + notes, Severity.Error);
+                MudDialog.Close(DialogResult.Ok(""));
+            }
+
+        }
+
+    }
+
+}

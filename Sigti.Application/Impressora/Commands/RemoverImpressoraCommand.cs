@@ -3,17 +3,20 @@ using Sigti.Application.Interfaces;
 
 namespace Sigti.Application
 {
-    public class RemoverImpressoraCommand : Notifiable<Notification>, ICommand
+    public class RemoverImpressoraCommand :  ICommand
     {
         public Guid Id { get; set; }
-        public RemoverImpressoraCommand(Guid id)
+        public string Modelo { get; set; }
+        public RemoverImpressoraCommand(Guid id, string modelo)
         {
             this.Id = id;
+            Modelo = modelo;
+        }
+        public RemoverImpressoraCommand()
+        {
+            
         }
 
-        public void Validate()
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

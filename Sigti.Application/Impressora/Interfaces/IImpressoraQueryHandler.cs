@@ -12,5 +12,6 @@ namespace Sigti.Application.Interfaces
     public interface IImpressoraQueryHandler
     {
         Task<IEnumerable<ImpressoraDTO>> ListaImpressoras();
+        Task<IEnumerable<ListaImpressoraGridDTO>> GridImpressoras();
     }
 }

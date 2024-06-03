@@ -24,7 +24,7 @@
                     <MudTextField @bind-Value="@Computador.Patrimonio" Label="Patrimônio" For="@(() => Computador.Patrimonio)" />
                 </MudItem>
                 <MudItem xs="4">
-                    <MudSelect xs Label="Localização" Text=" " @bind-Value="@Computador.LocalizacaoId">
+                    <MudSelect Label="Localização" Text="" @bind-Value="@Computador.LocalizacaoId">
                         @foreach (var item in Localidades)
                         {
                             <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
@@ -33,7 +33,7 @@
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="4">
-                    <MudSelect Label="Setor" Text=" " @bind-Value="@Computador.SetorId">
+                    <MudSelect Label="Setor" Text="" @bind-Value="@Computador.SetorId">
                         @foreach (var item in Setores.Where(x => x.LocalizacaoId == Computador.LocalizacaoId))
                         {
                             <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>

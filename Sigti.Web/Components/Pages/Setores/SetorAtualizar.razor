@@ -44,11 +44,11 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public AtualizarSetorCommand Setor { get; set; } = new();
-    public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        Localidades = (await Query.ListaLocalizacoes()).ToList();
+       // Localidades = (await Query.ListaLocalizacoes()).ToList();
     }
     private void Cancel()
     {

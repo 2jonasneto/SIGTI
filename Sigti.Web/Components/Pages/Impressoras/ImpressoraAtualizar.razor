@@ -1,30 +1,36 @@
-﻿@using Sigti.Application
+﻿@using Microsoft.AspNetCore.Components
+@using Sigti.Application
 @using Sigti.Application.Base
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
+@using MudBlazor
 @inject ISnackbar Snackbar
-@inject ICommandHandler<AtualizarComputadorCommand> Handler
+@inject ICommandHandler<AtualizarImpressoraCommand> Handler
 @inject ILocalizacaoQueryHandler local
 @inject ISetorQueryHandler setor
 <MudDialog TitleClass="titleclass">
     <TitleContent>
         <MudText Typo="Typo.h6">
 
-            Atualizar @Computador.HostName
+            Atualizar @Impressora.Modelo
         </MudText>
     </TitleContent>
     <DialogContent>
-        <EditForm @ref=form Model=Computador OnValidSubmit="Salvar">
+        <EditForm @ref=form Model=Impressora OnValidSubmit="Salvar">
             <DataAnnotationsValidator />
             <MudGrid>
                 <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.HostName" Label="Nome do Host" For="@(() => Computador.HostName)" />
+                    <MudTextField @bind-Value="@Impressora.Modelo" Label="Modelo" For="@(() => Impressora.Modelo)" />
                 </MudItem>
                 <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Patrimonio" Label="Patrimônio" For="@(() => Computador.Patrimonio)" />
+                    <MudTextField @bind-Value="@Impressora.Patrimonio" Label="Patrimônio" For="@(() => Impressora.Patrimonio)" />
+                </MudItem>
+
+                <MudItem xs="4" Class="pt-3">
+                    <MudCheckBox @bind-Value="@Impressora.Alugado" Label="Alugado" For="@(() => Impressora.Alugado)" LabelPosition="LabelPosition.Start" />
                 </MudItem>
                 <MudItem xs="4">
-                    <MudSelect xs Label="Localização" Text="" @bind-Value="@Computador.LocalizacaoId">
+                    <MudSelect Label="Localização" Text="" @bind-Value="@Impressora.LocalizacaoId">
                         @foreach (var item in Localidades)
                         {
                             <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
@@ -33,51 +39,49 @@
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="4">
-                    <MudSelect Label="Setor" Text="" @bind-Value="@Computador.SetorId">
-                        @foreach (var item in Setores.Where(x => x.LocalizacaoId == Computador.LocalizacaoId))
+                    <MudSelect Label="Setor" Text="" @bind-Value="@Impressora.SetorId">
+                        @foreach (var item in Setores.Where(x => x.LocalizacaoId == Impressora.LocalizacaoId))
                         {
                             <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
 
                         }
                     </MudSelect>
                 </MudItem>
-                <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Processador" Label="Processador" For="@(() => Computador.Processador)" />
-                </MudItem>
+
 
                 <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Memoria" Label="Memória" For="@(() => Computador.Memoria)" />
+                    <MudTextField Mask="@ipv4Mask" @bind-Value="@Impressora.Ip" Label="Ip" For="@(() => Impressora.Ip)" />
+                </MudItem>
+
+
+                <MudItem xs="4">
+                    <MudSelect Label="Tipo" Text=" " @bind-Value="@Impressora.Tipo">
+                        @foreach (var item in Tipos)
+                        {
+                            <MudSelectItem Value=@((ETipoImpressora)item.Key)>@item.Value</MudSelectItem>
+
+                        }
+                    </MudSelect>
                 </MudItem>
 
                 <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Disco" Label="Discos" For="@(() => Computador.Disco)" />
-                </MudItem>
+                    <MudSelect Label="Conexão" Text=" " @bind-Value="@Impressora.Conexao">
+                        @foreach (var item in Conexoes)
+                        {
+                            <MudSelectItem Value=@((ETipoConexaoImpressora)item.Key)>@item.Value</MudSelectItem>
 
-                <MudItem xs="4">
-                    <MudTextField Mask="@ipv4Mask" @bind-Value="@Computador.Ip" Label="Ip" For="@(() => Computador.Ip)" />
-                </MudItem>
-
-                <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Anydesk" Label="Anydesk" For="@(() => Computador.Anydesk)" />
-
+                        }
+                    </MudSelect>
                 </MudItem>
 
 
-
-                <MudItem xs="6">
-                    <MudTextField @bind-Value="@Computador.SistemaOperacional" Label="Sistema" For="@(() => Computador.SistemaOperacional)" />
-                </MudItem>
-                <MudItem xs="6">
-                    <MudTextField @bind-Value="@Computador.Grupos" Label="Grupos" For="@(() => Computador.Grupos)" />
-                </MudItem>
 
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@Computador.Observacao" Label="Observação" For="@(() => Computador.Observacao)" Lines="2" />
+                    <MudTextField @bind-Value="@Impressora.Observacao" Label="Observação" For="@(() => Impressora.Observacao)" Lines="2" />
                 </MudItem>
 
 
             </MudGrid>
-
 
         </EditForm>
 
@@ -92,16 +96,31 @@
 
     EditForm form;
     public IMask ipv4Mask = RegexMask.IPv4();
-
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public AtualizarComputadorCommand Computador { get; set; } = new();
+    [Parameter] public AtualizarImpressoraCommand Impressora { get; set; } = new();
     [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
     [Parameter] public List<SetorDTO> Setores { get; set; } = new();
+    public Dictionary<int, string> Tipos { get; set; } = new();
+    public Dictionary<int, string> Conexoes { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
 
+        @foreach (ETipoImpressora item in Enum.GetValues(typeof(ETipoImpressora)))
+        {
+
+            Tipos.Add((int)item, item.ToString());
+
+
+        }
+        @foreach (ETipoConexaoImpressora item in Enum.GetValues(typeof(ETipoConexaoImpressora)))
+        {
+
+            Conexoes.Add((int)item, item.ToString());
+
+
+        }
         //  Setores = (await setor.ListaSetores()).ToList();
         //Localidades = (await local.ListaLocalizacoes()).ToList();
     }
@@ -115,14 +134,14 @@
 
         if (form.EditContext.Validate())
         {
-            Computador.UltimoUsuarioLogado = "";
-            Computador.ModificadoPor = "SYSTEM";
-            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Computador);
+
+            Impressora.ModificadoPor = "SYSTEM";
+            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Impressora);
             if (r.Success)
             {
                 Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
                 //In a real world scenario this bool would probably be a service to delete the item from api/database
-                Snackbar.Add($"Setor {Computador.HostName} atualizada!", Severity.Success);
+                Snackbar.Add($"Setor {Impressora.Modelo} atualizada!", Severity.Success);
                 MudDialog.Close(DialogResult.Ok(""));
             }
             else

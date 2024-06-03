@@ -21,21 +21,31 @@ namespace Sigti.Web
             builder.Services.AddDbContext<SigtiContext>(options => options
             .UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
             builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
-            builder.Services.AddScoped<IComputadorQueryHandler, ComputadorQueryHandler>();
-            builder.Services.AddScoped<ISetorQueryHandler, SetorQueryHandler>();
-            builder.Services.AddScoped<ILocalizacaoQueryHandler, LocalizacaoQueryHandler>();
+
+           
+            
+
             builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<AtualizarComputadorCommand>, ComputadorCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<RemoverComputadorCommand>, ComputadorCommandHandler>();
-           
+            builder.Services.AddScoped<IComputadorQueryHandler, ComputadorQueryHandler>();
+
             builder.Services.AddScoped<ICommandHandler<AdicionarLocalizacaoCommand>, LocalizacaoCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<AtualizarLocalizacaoCommand>, LocalizacaoCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<RemoverLocalizacaoCommand>, LocalizacaoCommandHandler>();
-          
-             builder.Services.AddScoped<ICommandHandler<AdicionarSetorCommand>, SetorCommandHandler>();
+            builder.Services.AddScoped<ILocalizacaoQueryHandler, LocalizacaoQueryHandler>();
+
+            builder.Services.AddScoped<ICommandHandler<AdicionarSetorCommand>, SetorCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<AtualizarSetorCommand>, SetorCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<RemoverSetorCommand>, SetorCommandHandler>();
-          
+            builder.Services.AddScoped<ISetorQueryHandler, SetorQueryHandler>();
+
+
+            builder.Services.AddScoped<ICommandHandler<AdicionarImpressoraCommand>, ImpressoraCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<AtualizarImpressoraCommand>, ImpressoraCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<RemoverImpressoraCommand>, ImpressoraCommandHandler>();
+            builder.Services.AddScoped<IImpressoraQueryHandler, ImpressoraQueryHandler>();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
