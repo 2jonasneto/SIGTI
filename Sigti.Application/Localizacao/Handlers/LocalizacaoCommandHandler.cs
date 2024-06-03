@@ -28,60 +28,87 @@ namespace Sigti.Application.Handlers
 
         public async Task<ICommandResult> Execute(AdicionarLocalizacaoCommand command)
         {
-
-
-            /*c.Validate();
-            if (c.IsValid == false)
+            try
             {
-                return new GenericCommandResult(false, CommandMessages.InsertError, c.Notifications);
-            }*/
-            if (!_data.Localizacoes.Create(_mapper.Map<Localizacao>(command)))
+
+                if (!await _data.Init())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                }
+                if (!_data.Localizacoes.Create(_mapper.Map<Localizacao>(command)))
+                {
+                    await _data.Rollback();
+                    AddNotifications(_data.Localizacoes.GetNotifications());
+                    _data.Localizacoes.NotificationsClear();
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                }
+                if (!await _data.Save())
+                {
+                    await _data.Rollback();
+                    AddNotifications(_data.GetNotifications());
+                    _data.NotificationsClear();
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                }
+                if (!await _data.Commit())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                }
+                return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
+            }
+            catch (Exception ex)
             {
-                AddNotifications(_data.Localizacoes.GetNotifications());
-                _data.Localizacoes.NotificationsClear();
+
+                AddNotification("Erro", ex.Message);
                 return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
             }
-            if (!await _data.Save())
-            {
-                AddNotifications(_data.GetNotifications());
-                _data.NotificationsClear();
-                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
-            }
-            return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
+
 
         }
 
         public async Task<ICommandResult> Execute(AtualizarLocalizacaoCommand command)
         {
-            var loc = await _data.Localizacoes.GetByIdAsync(command.Id);
-            if (loc == null)
+            try
             {
-                return new GenericCommandResult(false, "Registro não existe na base", Notifications);
+                var loc = await _data.Localizacoes.GetByIdAsync(command.Id);
+                if (loc == null)
+                {
+                    return new GenericCommandResult(false, "Registro não existe na base", Notifications);
 
+                }
+                loc.Atualizar(command.Nome, command.Descricao, command.ModificadoPor);
+                if (!await _data.Init())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+                if (!_data.Localizacoes.Update(loc))
+                {
+                    await _data.Rollback();
+                    AddNotifications(_data.Localizacoes.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+                if (!await _data.Save())
+                {
+                    await _data.Rollback();
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+                if (!await _data.Commit())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+                return new GenericCommandResult(true, CommandMessages.UpdateSuccess, Notifications);
             }
-            loc.Atualizar(command.Nome, command.Descricao, command.ModificadoPor);
-            if (!await _data.Init())
+            catch (Exception ex)
             {
-                AddNotifications(_data.GetNotifications());
+
+                AddNotification("Erro", ex.Message);
                 return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
             }
-            if (!_data.Localizacoes.Update(loc))
-            {
-                AddNotifications(_data.Localizacoes.GetNotifications());
-                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
-            }
-            if (!await _data.Save())
-            {
-                await _data.Rollback();
-                AddNotifications(_data.GetNotifications());
-                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
-            }
-            if (!await _data.Commit())
-            {
-                AddNotifications(_data.GetNotifications());
-                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
-            }
-            return new GenericCommandResult(true, CommandMessages.UpdateSuccess, Notifications);
+
         }
         public async Task<ICommandResult> Execute(RemoverLocalizacaoCommand command)
         {

@@ -27,41 +27,99 @@ namespace Sigti.Application.Handlers
 
         public async Task<ICommandResult> Execute(AdicionarImpressoraCommand command)
         {
-           
 
-                /*c.Validate();
-                if (c.IsValid == false)
+            try
+            {
+
+                if (!await _data.Init())
                 {
-                    return new GenericCommandResult(false, CommandMessages.InsertError, c.Notifications);
-                }*/
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
                 if (!_data.Impressoras.Create(_mapper.Map<Impressora>(command)))
                 {
+                    await _data.Rollback();
                     AddNotifications(_data.Impressoras.GetNotifications());
                     return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
                 }
                 if (!await _data.Save())
                 {
+                    await _data.Rollback();
                     AddNotifications(_data.Impressoras.GetNotifications());
                     return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
                 }
+                if (!await _data.Commit())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
                 return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
+            }
+            catch (Exception ex)
+            {
+                AddNotification("Erro", ex.Message);
+                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+            }
 
         }
 
         public async Task<ICommandResult> Execute(AtualizarImpressoraCommand command)
         {
 
-            if (!_data.Impressoras.Create(_mapper.Map<Impressora>(command)))
+
+            try
             {
-                AddNotifications(_data.Impressoras.GetNotifications());
-                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                var impressora = await _data.Impressoras.GetByIdAsync(command.Id);
+                if (impressora == null)
+                {
+                    return new GenericCommandResult(false, "Registro não existe na base", Notifications);
+
+                }
+                impressora.Atualizar(
+                modelo: command.Modelo,
+                patrimonio: command.Patrimonio,
+                alugado: command.Alugado,
+                conexao: command.Conexao,
+                tipo: command.Tipo,
+                ip: command.Ip,
+                observacao: command.Observacao,
+                modificadoPor: command.ModificadoPor,
+                setorId: command.SetorId,
+                localizacaoId: command.LocalizacaoId
+
+                );
+                if (!await _data.Init())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+                if (!_data.Impressoras.Update(impressora))
+                {
+                    await _data.Rollback();
+                    AddNotifications(_data.Impressoras.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+
+
+
+                if (!await _data.Save())
+                {
+                    await _data.Rollback();
+                    AddNotifications(_data.Impressoras.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                }
+                if (!await _data.Commit())
+                {
+                    AddNotifications(_data.GetNotifications());
+                    return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
+                }
+                return new GenericCommandResult(true, CommandMessages.UpdateSuccess, Notifications);
             }
-            if (!await _data.Save())
+            catch (Exception ex)
             {
-                AddNotifications(_data.Impressoras.GetNotifications());
-                return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
+                AddNotification("Erro", ex.Message);
+                return new GenericCommandResult(false, CommandMessages.UpdateError, Notifications);
             }
-            return new GenericCommandResult(true, CommandMessages.InsertSuccess, Notifications);
         }
         public async Task<ICommandResult> Execute(RemoverImpressoraCommand command)
         {
