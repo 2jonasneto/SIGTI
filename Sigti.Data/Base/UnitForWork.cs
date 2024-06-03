@@ -15,6 +15,8 @@ namespace Sigti.Core.Interfaces
         public IImpressoraRepository Impressoras { get; private set; }
         public ISetorRepository Setores { get; private set; }
         public ILocalizacaoRepository Localizacoes { get; private set; }
+        public IControladoraRepository Controladoras { get; private set; }
+        public IAcessoControladoraRepository AcessoControladoras{ get; private set; }
 
         private readonly SigtiContext _context;
         private IDbContextTransaction? transaction = null;
@@ -27,6 +29,8 @@ namespace Sigti.Core.Interfaces
             Impressoras = new ImpressoraRepository(_context);
             Setores = new SetorRepository(_context);
             Localizacoes = new LocalizacaoRepository(_context);
+            Controladoras = new ControladoraRepository(_context);
+            AcessoControladoras = new AcessoControladoraRepository(_context);
 
         }
       

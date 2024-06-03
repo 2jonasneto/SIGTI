@@ -28,7 +28,8 @@
         public string Nome { get; private set; }
         public string Descricao { get; private set; }
 
-
+        public ICollection<AcessoControladora> AcessoControladoras { get; }
+        public ICollection<Controladora> Controladoras { get; }
         public ICollection<Computador> Computadores { get; }
         public ICollection<Impressora> Impressoras { get; }
         public ICollection<Setor> Setores { get; }

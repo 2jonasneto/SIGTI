@@ -1,0 +1,98 @@
+﻿@page "/localidade/lista"
+
+
+@using Sigti.Application
+@using Sigti.Application.DTO
+@using Sigti.Application.Interfaces
+@inject IControladoraQueryHandler Query
+@inject IDialogService DialogService
+
+<h4>Lista de Controladoras</h4>
+<MudDivider/>
+
+<br />
+<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<br /> 
+<br /> 
+
+<MudDataGrid Items="@Controladoras" Striped="true" Bordered="true" Dense="true" FilterCaseSensitivity=DataGridFilterCaseSensitivity.CaseInsensitive
+    Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
+    <Columns>
+       
+
+        <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;"  />
+        <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.DataModificacao" Title="Última atualização" CellStyle="width: 100%;" />
+        <TemplateColumn Title="Ações" Filterable="false" Sortable="false">
+            <CellTemplate >
+                <MudStack Row >
+                    <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Tertiary" Icon="@Icons.Material.Filled.Edit" OnClick="@((e) => Atualizar(context.Item))"></MudIconButton>
+                    <MudIconButton Disabled=@(context.Item.Nome=="MATRIZ") Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@((e) => Remover(context.Item))"></MudIconButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="ListaControladoraGridDTO" />
+    </PagerContent>
+</MudDataGrid>
+@code {
+    private IEnumerable<ListaControladoraGridDTO> Controladoras = new List<ListaControladoraGridDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+        await Loading();
+    }
+    async Task Loading()
+    {
+        Controladoras = await Query.GridControladoras();
+
+    }
+    async Task Adicionar()
+    {
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth=true };
+        var dialog = await DialogService.ShowAsync<ControladoraAdicionar>("Adicionar Novo",options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Atualizar(ListaControladoraGridDTO dto)
+    {
+        var upd = new AtualizarControladoraCommand(dto.Id,dto.Nome, dto.Descricao, dto.ModificadoPor,dto.LocalizacaoId,dto.SetorId);
+        var parameters = new DialogParameters<ControladoraAtualizar> { { x=>x.Controladora,upd} };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<ControladoraAtualizar>("Atualizar",parameters,options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+    async Task Remover(ListaControladoraGridDTO dto)
+    {
+        var upd = new RemoverControladoraCommand(dto.Id, dto.Nome);
+        var parameters = new DialogParameters<ControladoraRemover> { { x => x.Controladora, upd } };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var dialog = await DialogService.ShowAsync<ControladoraRemover>("Remover", parameters,options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await Loading();
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            //  Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            //    Servers.RemoveAll(item => item.Id == deletedServer);
+        }
+    }
+}

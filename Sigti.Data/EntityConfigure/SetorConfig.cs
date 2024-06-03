@@ -15,6 +15,8 @@ namespace Sigti.Data.EntityConfigure
 
             builder.HasMany(f => f.Impressoras).WithOne(b => b.Setor).OnDelete(DeleteBehavior.Restrict); ;
             builder.HasMany(f => f.Computadores).WithOne(b => b.Setor).OnDelete(DeleteBehavior.Restrict); ;
+            builder.HasMany(f => f.Controladoras).WithOne(b => b.Setor).OnDelete(DeleteBehavior.Restrict); ;
+            builder.HasMany(f => f.AcessoControladoras).WithOne(b => b.Setor).OnDelete(DeleteBehavior.Restrict); ;
 
            
         }

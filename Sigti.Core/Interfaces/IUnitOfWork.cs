@@ -13,6 +13,8 @@ namespace Sigti.Core.Interfaces
         IComputadorRepository Computadores { get; }
         IImpressoraRepository Impressoras { get; }
         ILocalizacaoRepository Localizacoes { get; }
+        IControladoraRepository Controladoras { get; }
+        IAcessoControladoraRepository AcessoControladoras { get; }
         ISetorRepository Setores { get; }
         Task<bool> Init();
         Task<bool> Commit();
