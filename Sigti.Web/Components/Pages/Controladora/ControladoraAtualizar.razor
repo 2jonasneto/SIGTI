@@ -1,5 +1,6 @@
 ﻿@using Sigti.Application
 @using Sigti.Application.Base
+@using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AtualizarControladoraCommand> Handler
@@ -16,6 +17,22 @@
 
             <MudTextField @bind-Value="@Controladora.Nome" Label="Nome" For="@(() => Controladora.Nome)" />
             <MudTextField @bind-Value="@Controladora.Descricao" Label="Descrição" Lines="2" />
+
+            <MudSelect Label="Localização" Text=" " @bind-Value="@Controladora.LocalizacaoId">
+                @foreach (var item in Localidades)
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
+
+            <MudSelect Label="Setor" Text=" " @bind-Value="@Controladora.SetorId">
+                @foreach (var item in Setores.Where(x => x.LocalizacaoId == Controladora.LocalizacaoId))
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
 
 
         </EditForm>
@@ -34,7 +51,8 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public AtualizarControladoraCommand Controladora { get; set; } = new();
-
+    [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    [Parameter] public List<SetorDTO> Setores { get; set; } = new();
     private void Cancel()
     {
         MudDialog.Cancel();
@@ -67,5 +85,5 @@
             }
 
         }
-    }     
+    }
 }

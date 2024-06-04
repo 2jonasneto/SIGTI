@@ -46,6 +46,18 @@ namespace Sigti.Web
             builder.Services.AddScoped<ICommandHandler<RemoverImpressoraCommand>, ImpressoraCommandHandler>();
             builder.Services.AddScoped<IImpressoraQueryHandler, ImpressoraQueryHandler>();
 
+
+            builder.Services.AddScoped<ICommandHandler<AdicionarControladoraCommand>, ControladoraCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<AtualizarControladoraCommand>, ControladoraCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<RemoverControladoraCommand>, ControladoraCommandHandler>();
+            builder.Services.AddScoped<IControladoraQueryHandler, ControladoraQueryHandler>();
+
+
+            builder.Services.AddScoped<ICommandHandler<AdicionarAcessoControladoraCommand>, AcessoControladoraCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<AtualizarAcessoControladoraCommand>, AcessoControladoraCommandHandler>();
+            builder.Services.AddScoped<ICommandHandler<RemoverAcessoControladoraCommand>, AcessoControladoraCommandHandler>();
+            builder.Services.AddScoped<IAcessoControladoraQueryHandler, AcessoControladoraQueryHandler>();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 

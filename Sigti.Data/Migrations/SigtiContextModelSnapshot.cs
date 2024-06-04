@@ -466,7 +466,7 @@ namespace Sigti.Data.Migrations
                         {
                             Id = new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"),
                             Ativo = true,
-                            DataModificacao = new DateTime(2024, 6, 3, 13, 44, 48, 385, DateTimeKind.Local).AddTicks(8045),
+                            DataModificacao = new DateTime(2024, 6, 3, 21, 29, 5, 921, DateTimeKind.Local).AddTicks(694),
                             Descricao = "",
                             ModificadoPor = "SYSTEM",
                             Nome = "MATRIZ"
@@ -508,9 +508,9 @@ namespace Sigti.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("38f56217-8b66-4b4b-9d40-563f350e8cb4"),
+                            Id = new Guid("7990de56-a99f-430e-b3bf-3ecddc8fe038"),
                             Ativo = true,
-                            DataModificacao = new DateTime(2024, 6, 3, 13, 44, 48, 385, DateTimeKind.Local).AddTicks(8445),
+                            DataModificacao = new DateTime(2024, 6, 3, 21, 29, 5, 921, DateTimeKind.Local).AddTicks(850),
                             Descricao = "",
                             LocalizacaoId = new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"),
                             ModificadoPor = "SYSTEM",

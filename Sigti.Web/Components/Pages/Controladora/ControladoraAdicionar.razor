@@ -1,8 +1,11 @@
 ﻿@using Sigti.Application
+@using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
 @using Sigti.Application.Base
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AdicionarControladoraCommand> Handler
+@inject ISetorQueryHandler setor
+@inject ILocalizacaoQueryHandler local
 <MudDialog TitleClass="titleclass">
     <TitleContent>
         <MudText Typo="Typo.h6">
@@ -14,28 +17,51 @@
         <EditForm @ref=form Model=Controladora OnValidSubmit="Salvar">
             <DataAnnotationsValidator />
 
-            <MudTextField @bind-Value="@Controladora.Nome"  Label="Nome" For="@(() => Controladora.Nome)" />
-            <MudTextField @bind-Value="@Controladora.Descricao"  Label="Descrição" Lines="2" />
+            <MudTextField @bind-Value="@Controladora.Nome" Label="Nome" For="@(() => Controladora.Nome)" />
+            <MudTextField @bind-Value="@Controladora.Descricao" Label="Descrição" Lines="2" />
 
-      
+            <MudSelect Label="Localização" Text="" @bind-Value="@Controladora.LocalizacaoId">
+                @foreach (var item in Localidades)
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
+
+
+            <MudSelect Label="Setor" Text="" @bind-Value="@Controladora.SetorId">
+                @foreach (var item in Setores.Where(x => x.LocalizacaoId == Controladora.LocalizacaoId))
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
+
+
         </EditForm>
 
     </DialogContent>
     <DialogActions>
-        <MudButton   Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
-        <MudButton  OnClick="Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     EditForm form;
     [Parameter] public AdicionarControladoraCommand Controladora { get; set; } = new();
-
+    public List<SetorDTO> Setores { get; set; } = new();
+    public List<LocalizacaoDTO> Localidades { get; set; } = new();
     private void Cancel()
     {
         MudDialog.Cancel();
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        Localidades = (await local.ListaLocalizacoes()).ToList();
+        Setores = (await setor.ListaSetores()).ToList();
+    }
     private async Task Salvar()
     {
         if (form.EditContext.Validate())
@@ -55,7 +81,7 @@
                 {
                     notes += item.Message + "\n";
                 }
-               
+
                 Snackbar.Add(r.Message + notes, Severity.Error);
                 MudDialog.Close(DialogResult.Ok(""));
             }

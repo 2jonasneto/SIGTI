@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sigti.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +58,7 @@ namespace Sigti.Data.Migrations
                     Nome = table.Column<string>(type: "Varchar(50)", nullable: false),
                     Descricao = table.Column<string>(type: "Varchar(100)", nullable: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: false),
-                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    ModificadoPor = table.Column<string>(type: "Varchar(50)", nullable: true),
                     DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -181,7 +181,7 @@ namespace Sigti.Data.Migrations
                     Descricao = table.Column<string>(type: "Varchar(100)", nullable: false),
                     LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: false),
-                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    ModificadoPor = table.Column<string>(type: "Varchar(50)", nullable: true),
                     DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -214,7 +214,7 @@ namespace Sigti.Data.Migrations
                     LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Observacao = table.Column<string>(type: "Varchar(300)", nullable: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: false),
-                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    ModificadoPor = table.Column<string>(type: "Varchar(50)", nullable: true),
                     DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -228,6 +228,36 @@ namespace Sigti.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Computadores_Setores_SetorId",
+                        column: x => x.SetorId,
+                        principalTable: "Setores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Controladoras",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Descricao = table.Column<string>(type: "Varchar(100)", nullable: false),
+                    LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SetorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    ModificadoPor = table.Column<string>(type: "Varchar(50)", nullable: true),
+                    DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Controladoras", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Controladoras_Localizacoes_LocalizacaoId",
+                        column: x => x.LocalizacaoId,
+                        principalTable: "Localizacoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Controladoras_Setores_SetorId",
                         column: x => x.SetorId,
                         principalTable: "Setores",
                         principalColumn: "Id",
@@ -249,7 +279,7 @@ namespace Sigti.Data.Migrations
                     Conexao = table.Column<int>(type: "int", nullable: false),
                     Tipo = table.Column<int>(type: "int", nullable: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: false),
-                    Varchar50 = table.Column<string>(name: "Varchar(50)", type: "nvarchar(max)", nullable: true),
+                    ModificadoPor = table.Column<string>(type: "Varchar(50)", nullable: true),
                     DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -269,15 +299,68 @@ namespace Sigti.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AcessoControladoras",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "Varchar(50)", nullable: false),
+                    Observacao = table.Column<string>(type: "Varchar(200)", nullable: false),
+                    DigitalId = table.Column<string>(type: "Varchar(20)", nullable: false),
+                    ControladoraId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocalizacaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SetorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    ModificadoPor = table.Column<string>(type: "Varchar(50)", nullable: true),
+                    DataModificacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AcessoControladoras", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AcessoControladoras_Controladoras_ControladoraId",
+                        column: x => x.ControladoraId,
+                        principalTable: "Controladoras",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AcessoControladoras_Localizacoes_LocalizacaoId",
+                        column: x => x.LocalizacaoId,
+                        principalTable: "Localizacoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AcessoControladoras_Setores_SetorId",
+                        column: x => x.SetorId,
+                        principalTable: "Setores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "Localizacoes",
-                columns: new[] { "Id", "Ativo", "DataModificacao", "Descricao", "Varchar(50)", "Nome" },
-                values: new object[] { new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), true, new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2403), "", "SYSTEM", "MATRIZ" });
+                columns: new[] { "Id", "Ativo", "DataModificacao", "Descricao", "ModificadoPor", "Nome" },
+                values: new object[] { new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), true, new DateTime(2024, 6, 3, 21, 29, 5, 921, DateTimeKind.Local).AddTicks(694), "", "SYSTEM", "MATRIZ" });
 
             migrationBuilder.InsertData(
                 table: "Setores",
-                columns: new[] { "Id", "Ativo", "DataModificacao", "Descricao", "LocalizacaoId", "Varchar(50)", "Nome" },
-                values: new object[] { new Guid("ec69e422-fb19-4aa4-a50e-3e75fd75fca0"), true, new DateTime(2024, 5, 29, 17, 56, 6, 613, DateTimeKind.Local).AddTicks(2844), "", new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), "SYSTEM", "MATRIZ" });
+                columns: new[] { "Id", "Ativo", "DataModificacao", "Descricao", "LocalizacaoId", "ModificadoPor", "Nome" },
+                values: new object[] { new Guid("7990de56-a99f-430e-b3bf-3ecddc8fe038"), true, new DateTime(2024, 6, 3, 21, 29, 5, 921, DateTimeKind.Local).AddTicks(850), "", new Guid("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), "SYSTEM", "GERAL" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AcessoControladoras_ControladoraId",
+                table: "AcessoControladoras",
+                column: "ControladoraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AcessoControladoras_LocalizacaoId",
+                table: "AcessoControladoras",
+                column: "LocalizacaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AcessoControladoras_SetorId",
+                table: "AcessoControladoras",
+                column: "SetorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -329,6 +412,16 @@ namespace Sigti.Data.Migrations
                 column: "SetorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Controladoras_LocalizacaoId",
+                table: "Controladoras",
+                column: "LocalizacaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Controladoras_SetorId",
+                table: "Controladoras",
+                column: "SetorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Impressoras_LocalizacaoId",
                 table: "Impressoras",
                 column: "LocalizacaoId");
@@ -347,6 +440,9 @@ namespace Sigti.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AcessoControladoras");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -367,6 +463,9 @@ namespace Sigti.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Impressoras");
+
+            migrationBuilder.DropTable(
+                name: "Controladoras");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

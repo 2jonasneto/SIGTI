@@ -13,6 +13,8 @@ namespace Sigti.Application.Base
             CreateMap<Localizacao, LocalizacaoDTO>();
             CreateMap<Impressora, ImpressoraDTO>();
             CreateMap<Setor, SetorDTO>();
+            CreateMap<Controladora, ControladoraDTO>();
+            CreateMap<AcessoControladora, AcessoControladoraDTO>();
 
             CreateMap<AdicionarComputadorCommand, Computador>();
             CreateMap<AtualizarComputadorCommand, Computador>();
@@ -22,7 +24,10 @@ namespace Sigti.Application.Base
             CreateMap<AtualizarSetorCommand, Setor>();
             CreateMap<AdicionarImpressoraCommand, Impressora>();
             CreateMap<AtualizarImpressoraCommand, Impressora>();
-
+            CreateMap<AdicionarControladoraCommand, Controladora>();
+            CreateMap<AtualizarControladoraCommand, Controladora>();
+            CreateMap<AdicionarAcessoControladoraCommand, AcessoControladora>();
+            CreateMap<AtualizarAcessoControladoraCommand, AcessoControladora>();
         }
 
     }

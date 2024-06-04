@@ -1,8 +1,18 @@
-﻿<MudNavMenu Rounded="true" Margin="Margin.Dense"  Class="pa-2">
-   
+﻿<MudNavMenu Rounded="true" Margin="Margin.Dense"  Class="pa-2" >
     <MudNavLink Href="/ggg" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+   
+    <MudNavGroup Title="Equipamentos" Icon="@Icons.Material.Filled.SelectAll" Expanded="true">
+       
     <MudNavLink Href="computador/lista" Icon="@Icons.Material.Filled.Computer" >Computadores</MudNavLink>
     <MudNavLink Href="/impressora/lista" Icon="@Icons.Material.Filled.Print" >Impressoras</MudNavLink>
-    <MudNavLink Href="/localidade/lista" Icon="@Icons.Material.Filled.LocationCity" >Localidade</MudNavLink>
-    <MudNavLink Href="/setor/lista" Icon="@Icons.Material.Filled.Fax" >Setores</MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Segurança" Icon="@Icons.Material.Filled.Security" Expanded="true">
+        <MudNavLink Href="/controladora/lista" Icon="@Icons.Material.Filled.KeyboardAlt">Controladoras</MudNavLink>
+        <MudNavLink Href="/acesso/lista" Icon="@Icons.Material.Filled.CameraFront">Acessos</MudNavLink>
+    </MudNavGroup>
+   
+    <MudNavGroup Title="Configurações" Icon="@Icons.Material.Filled.Settings" Expanded="true">
+        <MudNavLink Href="/localidade/lista" Icon="@Icons.Material.Filled.LocationCity">Localidade</MudNavLink>
+        <MudNavLink Href="/setor/lista" Icon="@Icons.Material.Filled.Fax">Setores</MudNavLink>
+     </MudNavGroup>
 </MudNavMenu>
