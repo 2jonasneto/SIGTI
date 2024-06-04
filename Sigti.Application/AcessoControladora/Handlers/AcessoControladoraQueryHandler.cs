@@ -47,7 +47,9 @@ namespace Sigti.Application.Handlers
                     DataModificacao = control.DataModificacao,
                     Ativo = control.Ativo,
                     LocalizacaoId = control.LocalizacaoId,
-                    SetorId = control.SetorId
+                    SetorId = control.SetorId,
+                    DigitalId = control.DigitalId,
+                    ControladoraId=control.ControladoraId
                 });
             }
             return lista;

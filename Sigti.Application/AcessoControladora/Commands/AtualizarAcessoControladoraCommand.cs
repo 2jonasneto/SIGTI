@@ -6,7 +6,7 @@ namespace Sigti.Application
 {
     public class AtualizarAcessoControladoraCommand :  ICommand
     {
-        public AtualizarAcessoControladoraCommand(Guid id, string nome, string observacao, string modificadoPor, Guid localizacaoId, Guid setorId, string digitalId)
+        public AtualizarAcessoControladoraCommand(Guid id, string nome, string observacao, string modificadoPor, Guid localizacaoId, Guid setorId, string digitalId, Guid controladoraId)
         {
             Nome = nome;
             Observacao = observacao;
@@ -15,6 +15,7 @@ namespace Sigti.Application
             Id = id;
             SetorId = setorId;
             DigitalId = digitalId;
+            ControladoraId = controladoraId;
         }
         public AtualizarAcessoControladoraCommand()
         {

@@ -15,6 +15,7 @@ namespace Sigti.Application.DTO
         public string ModificadoPor { get; set; }
         public DateTime DataModificacao { get; set; }
         public string Nome { get; set; }
+        public string DigitalId { get; set; }
         public string Observacao { get; set; }
    
         public Guid LocalizacaoId { get; set; }

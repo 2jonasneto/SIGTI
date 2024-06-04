@@ -1,12 +1,12 @@
 ﻿@using Sigti.Application
 @using Sigti.Application.Interfaces
 @inject ISnackbar Snackbar
-@inject ICommandHandler<RemoverControladoraCommand> Handler
+@inject ICommandHandler<RemoverAcessoControladoraCommand> Handler
 <MudDialog TitleClass="titleclass">
     <TitleContent>
         <MudText Typo="Typo.h6">
           
-            Remover @Controladora.Nome
+            Remover @AcessoControladora.Nome
         </MudText>
     </TitleContent>
     <DialogContent>
@@ -20,7 +20,7 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public RemoverControladoraCommand Controladora { get; set; } = new();
+    [Parameter] public RemoverAcessoControladoraCommand AcessoControladora { get; set; } = new();
 
     private void Cancel()
     {
@@ -30,9 +30,9 @@
     private async Task Salvar()
     {
         
-        var r =await Handler.Execute(Controladora);
+        var r =await Handler.Execute(AcessoControladora);
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-        Snackbar.Add($"Controladora {Controladora.Nome} Removida!", Severity.Success);
+        Snackbar.Add($"AcessoControladora {AcessoControladora.Nome} Removida!", Severity.Success);
         MudDialog.Close(DialogResult.Ok(""));
     }
 }

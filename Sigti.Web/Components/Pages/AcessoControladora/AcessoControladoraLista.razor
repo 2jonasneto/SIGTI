@@ -1,14 +1,15 @@
-﻿@page "/controladora/lista"
+﻿@page "/acesso/lista"
 
 
 @using Sigti.Application
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
-@inject IControladoraQueryHandler Query
+@inject IAcessoControladoraQueryHandler Query
 @inject IDialogService DialogService
 @inject ILocalizacaoQueryHandler local
 @inject ISetorQueryHandler setor
-<h4>Lista de Controladoras</h4>
+@inject IControladoraQueryHandler control
+<h4>Lista de Acesso as Controladoras</h4>
 <MudDivider />
 
 <br />
@@ -16,13 +17,14 @@
 <br />
 <br />
 
-<MudDataGrid Items="@Controladoras" Striped="true" Bordered="true" Dense="true" FilterCaseSensitivity=DataGridFilterCaseSensitivity.CaseInsensitive
+<MudDataGrid Items="@AcessoControladoras" Striped="true" Bordered="true" Dense="true" FilterCaseSensitivity=DataGridFilterCaseSensitivity.CaseInsensitive
              Filterable="true" HeaderClass="title-gridclass" RowsPerPage="25">
     <Columns>
 
 
         <PropertyColumn Property="x => x.Nome" Title="Nome" CellStyle="width: 50%;" />
-        <PropertyColumn Property="x => x.Descricao" Title="Descrição" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.DigitalId" Title="Id" CellStyle="width: 100%;" />
+        <PropertyColumn Property="x => x.Observacao" Title="Observação" CellStyle="width: 100%;" />
         <PropertyColumn Property="x => x.Localizacao" Title="Localidade" CellStyle="width: 100%;" />
         <PropertyColumn Property="x => x.Setor" Title="Setor" CellStyle="width: 100%;" />
 
@@ -37,13 +39,14 @@
         </TemplateColumn>
     </Columns>
     <PagerContent>
-        <MudDataGridPager T="ListaControladoraGridDTO" />
+        <MudDataGridPager T="ListaAcessoControladoraGridDTO" />
     </PagerContent>
 </MudDataGrid>
 @code {
-    private IEnumerable<ListaControladoraGridDTO> Controladoras = new List<ListaControladoraGridDTO>();
+    private IEnumerable<ListaAcessoControladoraGridDTO> AcessoControladoras = new List<ListaAcessoControladoraGridDTO>();
     [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
     [Parameter] public List<SetorDTO> Setores { get; set; } = new();
+    [Parameter] public List<ControladoraDTO> Controladoras { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
 
@@ -51,14 +54,16 @@
     }
     async Task Loading()
     {
-        Controladoras = await Query.GridControladoras();
+        AcessoControladoras = await Query.GridAcessoControladoras();
         Setores = (await setor.ListaSetores()).ToList();
         Localidades = (await local.ListaLocalizacoes()).ToList();
+        Controladoras = (await control.ListaControladoras()).ToList();
+
     }
     async Task Adicionar()
     {
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
-        var dialog = await DialogService.ShowAsync<ControladoraAdicionar>("Adicionar Novo", options);
+        var dialog = await DialogService.ShowAsync<AcessoControladoraAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -69,17 +74,18 @@
             //    Servers.RemoveAll(item => item.Id == deletedServer);
         }
     }
-    async Task Atualizar(ListaControladoraGridDTO dto)
+    async Task Atualizar(ListaAcessoControladoraGridDTO dto)
     {
-        var upd = new AtualizarControladoraCommand(dto.Id, dto.Nome, dto.Descricao, dto.ModificadoPor, dto.LocalizacaoId, dto.SetorId);
-        var parameters = new DialogParameters<ControladoraAtualizar>
+        var upd = new AtualizarAcessoControladoraCommand(dto.Id, dto.Nome, dto.Observacao, dto.ModificadoPor, dto.LocalizacaoId, dto.SetorId,dto.DigitalId,dto.ControladoraId);
+        var parameters = new DialogParameters<AcessoControladoraAtualizar>
         {
-            { x=>x.Controladora,upd} ,
+            { x=>x.AcessoControladora,upd} ,
             { s => s.Setores, Setores },
-            { l => l.Localidades, Localidades }
+            { l => l.Localidades, Localidades },
+            { c => c.Controladoras, Controladoras }
         };
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
-        var dialog = await DialogService.ShowAsync<ControladoraAtualizar>("Atualizar", parameters, options);
+        var dialog = await DialogService.ShowAsync<AcessoControladoraAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -90,12 +96,12 @@
             //    Servers.RemoveAll(item => item.Id == deletedServer);
         }
     }
-    async Task Remover(ListaControladoraGridDTO dto)
+    async Task Remover(ListaAcessoControladoraGridDTO dto)
     {
-        var upd = new RemoverControladoraCommand(dto.Id, dto.Nome);
-        var parameters = new DialogParameters<ControladoraRemover> { { x => x.Controladora, upd } };
+        var upd = new RemoverAcessoControladoraCommand(dto.Id, dto.Nome);
+        var parameters = new DialogParameters<AcessoControladoraRemover> { { x => x.AcessoControladora, upd } };
         var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
-        var dialog = await DialogService.ShowAsync<ControladoraRemover>("Remover", parameters, options);
+        var dialog = await DialogService.ShowAsync<AcessoControladoraRemover>("Remover", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

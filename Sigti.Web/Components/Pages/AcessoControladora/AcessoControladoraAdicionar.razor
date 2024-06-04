@@ -3,9 +3,10 @@
 @using Sigti.Application.Interfaces
 @using Sigti.Application.Base
 @inject ISnackbar Snackbar
-@inject ICommandHandler<AdicionarControladoraCommand> Handler
+@inject ICommandHandler<AdicionarAcessoControladoraCommand> Handler
 @inject ISetorQueryHandler setor
 @inject ILocalizacaoQueryHandler local
+@inject IControladoraQueryHandler control
 <MudDialog TitleClass="titleclass">
     <TitleContent>
         <MudText Typo="Typo.h6">
@@ -14,13 +15,22 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <EditForm @ref=form Model=Controladora OnValidSubmit="Salvar">
+        <EditForm @ref=form Model=AcessoControladora OnValidSubmit="Salvar">
             <DataAnnotationsValidator />
 
-            <MudTextField @bind-Value="@Controladora.Nome" Label="Nome" For="@(() => Controladora.Nome)" />
-            <MudTextField @bind-Value="@Controladora.Descricao" Label="Descrição"  />
+            <MudTextField @bind-Value="@AcessoControladora.Nome" Label="Nome" For="@(() => AcessoControladora.Nome)" />
+            <MudTextField @bind-Value="@AcessoControladora.DigitalId" Label="Id"  />
+            <MudTextField @bind-Value="@AcessoControladora.Observacao" Label="Observação"  />
 
-            <MudSelect Label="Localização" Text="" @bind-Value="@Controladora.LocalizacaoId">
+            <MudSelect Label="Controladora" Text=" " @bind-Value="@AcessoControladora.ControladoraId">
+                @foreach (var item in Controladoras)
+                {
+                    <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
+
+                }
+            </MudSelect>
+
+            <MudSelect Label="Localização" Text=" " @bind-Value="@AcessoControladora.LocalizacaoId">
                 @foreach (var item in Localidades)
                 {
                     <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
@@ -29,8 +39,8 @@
             </MudSelect>
 
 
-            <MudSelect Label="Setor" Text="" @bind-Value="@Controladora.SetorId">
-                @foreach (var item in Setores.Where(x => x.LocalizacaoId == Controladora.LocalizacaoId))
+            <MudSelect Label="Setor" Text=" " @bind-Value="@AcessoControladora.SetorId">
+                @foreach (var item in Setores.Where(x => x.LocalizacaoId == AcessoControladora.LocalizacaoId))
                 {
                     <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
 
@@ -49,9 +59,10 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     EditForm form;
-    [Parameter] public AdicionarControladoraCommand Controladora { get; set; } = new();
+    [Parameter] public AdicionarAcessoControladoraCommand AcessoControladora { get; set; } = new();
     public List<SetorDTO> Setores { get; set; } = new();
     public List<LocalizacaoDTO> Localidades { get; set; } = new();
+    public List<ControladoraDTO> Controladoras { get; set; } = new();
     private void Cancel()
     {
         MudDialog.Cancel();
@@ -61,17 +72,18 @@
     {
         Localidades = (await local.ListaLocalizacoes()).ToList();
         Setores = (await setor.ListaSetores()).ToList();
+        Controladoras = (await control.ListaControladoras ()).ToList();
     }
     private async Task Salvar()
     {
         if (form.EditContext.Validate())
         {
-            Controladora.ModificadoPor = "SYSTEM";
-            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(Controladora);
+            AcessoControladora.ModificadoPor = "SYSTEM";
+            GenericCommandResult r = (GenericCommandResult)await Handler.Execute(AcessoControladora);
             //In a real world scenario this bool would probably be a service to delete the item from api/database
             if (r.Success)
             {
-                Snackbar.Add("Controladora adicionada!", Severity.Success);
+                Snackbar.Add("AcessoControladora adicionada!", Severity.Success);
                 MudDialog.Close(DialogResult.Ok(""));
             }
             else
