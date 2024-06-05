@@ -72,14 +72,26 @@ textarea.mud-input-slot {
     text-transform: uppercase;
 }
 
-button.mud-nav-link {
+#equips button.mud-nav-link {
     color: #258cfb
 }
 
-    button.mud-nav-link svg {
-        color:#258cfb  !important
-    }
-
-.nav-link-color {
+#equips button.mud-nav-link svg {
     color: #258cfb !important
 }
+#segs button.mud-nav-link {
+    color: #26b050
+}
+
+#segs button.mud-nav-link svg {
+   color: #26b050 !important
+}
+#configs button.mud-nav-link {
+    color: #c49703
+}
+
+    #configs button.mud-nav-link svg {
+        color: #c49703 !important
+    }
+
+
