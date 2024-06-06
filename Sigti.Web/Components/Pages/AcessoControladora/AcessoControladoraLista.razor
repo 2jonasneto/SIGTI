@@ -9,11 +9,13 @@
 @inject ILocalizacaoQueryHandler local
 @inject ISetorQueryHandler setor
 @inject IControladoraQueryHandler control
+@inject ISnackbar Snackbar
+
 <h4>Lista de Acesso as Controladoras</h4>
 <MudDivider />
 
 <br />
-<MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
+<MudButton Disabled="@authAdd" Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@((e) => Adicionar())">Adicionar Novo</MudButton>
 <br />
 <br />
 
@@ -43,12 +45,18 @@
     </PagerContent>
 </MudDataGrid>
 @code {
+    private bool authAdd = false;
     private IEnumerable<ListaAcessoControladoraGridDTO> AcessoControladoras = new List<ListaAcessoControladoraGridDTO>();
     [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
     [Parameter] public List<SetorDTO> Setores { get; set; } = new();
     [Parameter] public List<ControladoraDTO> Controladoras { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        if (Controladoras.Count==0)
+        {
+            authAdd = true;
+            Snackbar.Add("Somente é permitido adicionar acessos quando existem controladoras cadastradas. Favor realizar previamente o cadastro das controladoras", Severity.Error);
+        }
 
         await Loading();
     }
