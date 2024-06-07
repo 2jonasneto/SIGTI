@@ -52,13 +52,14 @@
     [Parameter] public List<ControladoraDTO> Controladoras { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+      
+
+        await Loading(); 
         if (Controladoras.Count==0)
         {
             authAdd = true;
             Snackbar.Add("Somente é permitido adicionar acessos quando existem controladoras cadastradas. Favor realizar previamente o cadastro das controladoras", Severity.Error);
         }
-
-        await Loading();
     }
     async Task Loading()
     {
