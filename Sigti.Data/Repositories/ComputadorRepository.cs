@@ -24,5 +24,6 @@ namespace Sigti.Data.Repositories
         {
             return await _context.Computadores.AsNoTracking().Include(x =>x.Localizacao).Include(x => x.Setor).ToListAsync();
         }
+       
     } 
 }

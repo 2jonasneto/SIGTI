@@ -109,7 +109,20 @@ namespace Sigti.Data.Base
             }
 
         }
+        public async Task<int> GetQuantity()
+        {
+            try
+            {
+                return await _context.Set<T>().AsNoTracking().CountAsync();
+            }
+            catch (Exception e)
+            {
 
+                AddNotification(new Notification("GetAll", $"{e.Message}\n" + e.InnerException));
+                return 0;
+            }
+
+        }
         public async Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T, bool>> expression)
         {
             try

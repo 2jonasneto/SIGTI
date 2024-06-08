@@ -18,7 +18,7 @@ namespace Sigti.Core.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T,bool>> expression);
         Task<T> GetByIdAsync(Guid id);
-
+        Task<int> GetQuantity();
 
 
         IReadOnlyCollection<Notification> GetNotifications();

@@ -1,0 +1,48 @@
+﻿@page "/"
+@using Sigti.Application.Interfaces
+@inject IComputadorQueryHandler query
+<PageTitle>Home</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" sm="3">
+        <MudCard Class="pa-8 ma-1" Elevation="3">
+            <MudGrid>
+                <MudItem xs="4">
+                     <MudIcon  Icon="@Icons.Material.Filled.Computer" Color="Color.Error" Style="font-size: 4rem" />
+                </MudItem>
+            
+                <MudItem xs="8" >
+                    <MudText Style="vertical-align:central;" Typo="Typo.body1">Computadores</MudText>
+                    <MudText Style="font-style:italic" Typo="Typo.h4">@pcs</MudText>
+                </MudItem>
+            
+               
+            </MudGrid>
+            
+          
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="3">
+        <MudCard Class="pa-16 ma-1" Elevation="3">
+
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="3">
+        <MudCard Class="pa-16 ma-1" Elevation="3">
+
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="3">
+        <MudCard Class="pa-16 ma-1" Elevation="3">
+
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code{
+    private int pcs;
+    protected override async Task OnInitializedAsync()
+    {
+        pcs = await query.GetQuantidade();
+    }
+}

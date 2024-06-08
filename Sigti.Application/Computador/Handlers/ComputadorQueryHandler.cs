@@ -38,26 +38,26 @@ namespace Sigti.Application.Handlers
             {
                 lista.Add(
                     new ListaComputadorGridDTO(
-                
-                    id : pc.Id,
-                    hostName : pc.HostName,
-                    patrimonio : pc.Patrimonio,
-                    ip : pc.Ip,
-                    anydesk : pc.Anydesk,
-                    processador : pc.Processador,
-                    memoria : pc.Memoria,
-                    disco : pc.Disco,
-                    grupos : pc.Grupos,
-                    ativo : pc.Ativo,
-                    modificadoPor : pc.ModificadoPor,
-                    dataModificacao : pc.DataModificacao,
-                    sistemaOperacional : pc.SistemaOperacional,
-                    ultimoUsuarioLogado : pc.UltimoUsuarioLogado,
-                    setor : pc.Setor.Nome,
-                    setorId : pc.SetorId,
-                    localizacaoId : pc.LocalizacaoId,
-                    localizacao : pc.Localizacao.Nome,
-                    observacao : pc.Observacao
+
+                    id: pc.Id,
+                    hostName: pc.HostName,
+                    patrimonio: pc.Patrimonio,
+                    ip: pc.Ip,
+                    anydesk: pc.Anydesk,
+                    processador: pc.Processador,
+                    memoria: pc.Memoria,
+                    disco: pc.Disco,
+                    grupos: pc.Grupos,
+                    ativo: pc.Ativo,
+                    modificadoPor: pc.ModificadoPor,
+                    dataModificacao: pc.DataModificacao,
+                    sistemaOperacional: pc.SistemaOperacional,
+                    ultimoUsuarioLogado: pc.UltimoUsuarioLogado,
+                    setor: pc.Setor.Nome,
+                    setorId: pc.SetorId,
+                    localizacaoId: pc.LocalizacaoId,
+                    localizacao: pc.Localizacao.Nome,
+                    observacao: pc.Observacao
 
                 ));
             }
@@ -70,7 +70,14 @@ namespace Sigti.Application.Handlers
             return pc;
 
         }
+        public async Task<int> GetQuantidade()
+        {
 
+            var d = await _data.Computadores.GetQuantity();
+
+            return d;
+
+        }
 
 
 
