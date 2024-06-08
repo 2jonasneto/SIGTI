@@ -17,14 +17,14 @@
         <EditForm @ref=form Model=Computador OnValidSubmit="Salvar">
             <DataAnnotationsValidator />
             <MudGrid>
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField @bind-Value="@Computador.HostName" Label="Nome do Host" For="@(() => Computador.HostName)" />
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField @bind-Value="@Computador.Patrimonio" Label="Patrimônio" For="@(() => Computador.Patrimonio)" />
                 </MudItem>
-                <MudItem xs="4">
-                    <MudSelect Label="Localização" Text="" @bind-Value="@Computador.LocalizacaoId">
+                <MudItem xs="12" sm="4">
+                    <MudSelect Label="Localização" Text=" " @bind-Value="@Computador.LocalizacaoId">
                         @foreach (var item in Localidades)
                         {
                             <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
@@ -32,8 +32,8 @@
                         }
                     </MudSelect>
                 </MudItem>
-                <MudItem xs="4">
-                    <MudSelect Label="Setor" Text="" @bind-Value="@Computador.SetorId">
+                <MudItem xs="12" sm="4">
+                    <MudSelect Label="Setor" Text=" " @bind-Value="@Computador.SetorId">
                         @foreach (var item in Setores.Where(x => x.LocalizacaoId == Computador.LocalizacaoId))
                         {
                             <MudSelectItem Value=@item.Id>@item.Nome</MudSelectItem>
@@ -41,33 +41,33 @@
                         }
                     </MudSelect>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField @bind-Value="@Computador.Processador" Label="Processador" For="@(() => Computador.Processador)" />
                 </MudItem>
 
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField @bind-Value="@Computador.Memoria" Label="Memória" For="@(() => Computador.Memoria)" />
                 </MudItem>
 
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField @bind-Value="@Computador.Disco" Label="Discos" For="@(() => Computador.Disco)" />
                 </MudItem>
 
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField Mask="@ipv4Mask" @bind-Value="@Computador.Ip" Label="Ip" For="@(() => Computador.Ip)" />
                 </MudItem>
 
-                <MudItem xs="4">
+                <MudItem xs="12" sm="4">
                     <MudTextField @bind-Value="@Computador.Anydesk" Label="Anydesk" For="@(() => Computador.Anydesk)" />
 
                 </MudItem>
 
               
 
-                <MudItem xs="6">
+                <MudItem xs="12" sm="6">
                     <MudTextField @bind-Value="@Computador.SistemaOperacional" Label="Sistema" For="@(() => Computador.SistemaOperacional)" />
                 </MudItem>
-                <MudItem xs="6">
+                <MudItem xs="12" sm="6">
                     <MudTextField @bind-Value="@Computador.Grupos" Label="Grupos" For="@(() => Computador.Grupos)" />
                 </MudItem>
 
