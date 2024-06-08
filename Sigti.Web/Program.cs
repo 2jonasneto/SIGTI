@@ -6,6 +6,10 @@ using Sigti.Core.Interfaces;
 using Sigti.Application;
 using Sigti.Application.Handlers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Authorization;
+using Sigti.Web.Components.Account;
+using Microsoft.AspNetCore.Identity;
+using Sigti.Web.Data;
 namespace Sigti.Web
 {
     public class Program
@@ -22,8 +26,22 @@ namespace Sigti.Web
             .UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
             builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
 
-           
-            
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddScoped<IdentityUserAccessor>();
+            builder.Services.AddScoped<IdentityRedirectManager>();
+            builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            })
+               .AddIdentityCookies();
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<SigtiContext>()
+                .AddSignInManager()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();
             builder.Services.AddScoped<ICommandHandler<AtualizarComputadorCommand>, ComputadorCommandHandler>();
@@ -80,7 +98,7 @@ namespace Sigti.Web
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
-
+            app.MapAdditionalIdentityEndpoints();
             app.Run();
         }
     }
