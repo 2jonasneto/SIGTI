@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Sigti.Data.Base
 {
-    public class SigtiContext:IdentityDbContext
+    public class SigtiContext:IdentityDbContext<ApplicationUser>
     {
         public SigtiContext(DbContextOptions<SigtiContext> options):base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)

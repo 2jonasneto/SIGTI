@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Sigti.Web.Components.Account.Pages;
 using Sigti.Web.Components.Account.Pages.Manage;
-using Sigti.Web.Data;
 using System.Security.Claims;
 using System.Text.Json;
 

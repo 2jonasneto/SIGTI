@@ -1,3 +1,4 @@
+global using Sigti.Data;
 using MudBlazor.Services;
 using Sigti.Web.Components;
 using Sigti.Data.Base;
@@ -9,12 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Authorization;
 using Sigti.Web.Components.Account;
 using Microsoft.AspNetCore.Identity;
-using Sigti.Web.Data;
+
 namespace Sigti.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,7 @@ namespace Sigti.Web
                .AddIdentityCookies();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SigtiContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
@@ -90,6 +91,58 @@ namespace Sigti.Web
             app.UseHttpsRedirection();
             var context = builder.Services.BuildServiceProvider().GetRequiredService<SigtiContext>();
             context.Database.Migrate();
+            var roleManager = builder.Services.BuildServiceProvider()
+    .GetRequiredService<RoleManager<IdentityRole>>();
+
+            var roles = new string[] { "Admin", "User" };
+            var user = new string[] { "admin@app", "user@app" };
+
+            IdentityResult result;
+            foreach (var role in roles)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(role);
+
+                if (!roleExist)
+                {
+                    result = await roleManager
+                        .CreateAsync(new IdentityRole(role));
+
+                    if (result.Succeeded)
+                    {
+                        var userManager = builder.Services.BuildServiceProvider()
+                            .GetRequiredService<UserManager<ApplicationUser>>();
+
+                        var config = builder.Services.BuildServiceProvider()
+                            .GetRequiredService<IConfiguration>();
+
+                        var admin = await userManager
+                            .FindByEmailAsync(role == "Admin" ? user[0] : user[1]);
+                        if (admin == null)
+                        {
+                            admin = new ApplicationUser()
+                            {
+                                UserName = role == "Admin" ? user[0] : user[1],
+                                Email = role == "Admin" ? user[0] : user[1],
+                                EmailConfirmed = true
+                            };
+                            result = await userManager
+                                .CreateAsync(admin, admin.Email);
+
+                            if (result.Succeeded)
+                            {
+                                result = await userManager
+                                    .AddToRoleAsync(admin, role);
+                                if (!result.Succeeded)
+                                {
+                                    // todo:processar erros
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
 
             app.UseHttpsRedirection();
 
