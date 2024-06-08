@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Sigti.Web.Data;
 
 namespace Sigti.Web.Components.Account
 {
