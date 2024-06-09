@@ -1,4 +1,4 @@
-﻿@page "/impressora/lista"
+﻿@page "/equipamentos/impressoras"
 @using Sigti.Application
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
@@ -61,6 +61,7 @@
     public List<SetorDTO> Setores { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        Program.siteMap = "Equipamentos / Impressoras";
         await Loading();
 
     }
@@ -68,7 +69,7 @@
     async Task Adicionar()
     {
         
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<ImpressoraAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
 
@@ -97,7 +98,7 @@
             { s => s.Setores, Setores },
             { l => l.Localidades, Localidades }
         };
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, MaxWidth = MaxWidth.Medium, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<ImpressoraAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
 

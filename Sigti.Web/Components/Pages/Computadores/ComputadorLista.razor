@@ -1,4 +1,4 @@
-﻿@page "/computador/lista"
+﻿@page "/equipamentos/computadores"
 @using Sigti.Application
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
@@ -66,6 +66,7 @@
     [Parameter] public List<SetorDTO> Setores { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        Program.siteMap = "Equipamentos / Computadores";
         await Loading();
        
     }

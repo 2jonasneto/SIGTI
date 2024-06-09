@@ -1,4 +1,4 @@
-﻿@page "/localidade/lista"
+﻿@page "/configuracoes/localidades"
 @rendermode RenderMode.InteractiveServer
 
 
@@ -42,7 +42,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-       
+        Program.siteMap = "Configurações / Localidades";
+
         await Loading();
     }
     async Task Loading()
@@ -52,7 +53,7 @@
     }
     async Task Adicionar()
     {
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth=true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<LocalidadeAdicionar>("Adicionar Novo",options);
         var result = await dialog.Result;
 
@@ -68,7 +69,7 @@
     {
         var upd = new AtualizarLocalizacaoCommand(dto.Id,dto.Nome, dto.Descricao, dto.ModificadoPor);
         var parameters = new DialogParameters<LocalidadeAtualizar> { { x=>x.Localidade,upd} };
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<LocalidadeAtualizar>("Atualizar",parameters,options);
         var result = await dialog.Result;
 

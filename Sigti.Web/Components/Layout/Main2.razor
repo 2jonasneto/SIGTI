@@ -1,24 +1,10 @@
-﻿@inherits LayoutComponentBase
-
-@rendermode RenderMode.InteractiveServer
-
-
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
-@code {
-    bool _drawerOpen = false;
-    bool _isDarkMode = true;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-    void ThemeChange()
-    {
-        _isDarkMode = !_isDarkMode;
-    }
-}
+﻿<MudMenuItem>
+    <form action="Account/Logout" method="post">
+       
+        <input type="hidden" name="ReturnUrl" value="" />
+        <button type="submit" class="nav-link">
+            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Sair
+        </button>
+        <AntiforgeryToken />
+    </form>
+</MudMenuItem>

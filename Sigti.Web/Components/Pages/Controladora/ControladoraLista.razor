@@ -1,4 +1,4 @@
-﻿@page "/controladora/lista"
+﻿@page "/equipamentos/controladoras"
 
 
 @using Sigti.Application
@@ -46,6 +46,7 @@
     [Parameter] public List<SetorDTO> Setores { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        Program.siteMap = "Equipamentos / Controladoras";
 
         await Loading();
     }
@@ -57,7 +58,7 @@
     }
     async Task Adicionar()
     {
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<ControladoraAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
 
@@ -78,7 +79,7 @@
             { s => s.Setores, Setores },
             { l => l.Localidades, Localidades }
         };
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<ControladoraAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
 

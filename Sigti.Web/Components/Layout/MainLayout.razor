@@ -1,7 +1,12 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Identity
+@inherits LayoutComponentBase
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager NavigationManager
+
 <MudThemeProvider IsDarkMode=@_isDarkMode />
 <MudDialogProvider />
 <MudSnackbarProvider />
+
 
 
 <MudLayout>
@@ -16,7 +21,10 @@
 
             <MudSpacer />
             <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" Edge="Edge.End" OnClick="@((e) => ThemeChange())" />
-
+            <MudMenu Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopLeft">
+                <MudMenuItem>Perfil</MudMenuItem>
+              <Main2/>
+            </MudMenu>
         </MudAppBar>
 
         <MudDrawer Elevation="10" Width="200px" Class="pt-3" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
@@ -25,13 +33,16 @@
 
     </AuthorizeView>
 
-    <MudMainContent >
-          <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pt-5" >
-            
-        @Body
-       </MudContainer>
+    <MudMainContent>
+        <MudAppBar Style="position:static" Color="Color.Transparent" Dense="true" Elevation="25">
+            <MudIcon Icon="@Icons.Material.Filled.MapsHomeWork" />  <MudText Typo="Typo.subtitle1">&nbsp;  / @Program.siteMap</MudText>
+        </MudAppBar>
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pt-5">
+
+            @Body
+        </MudContainer>
     </MudMainContent>
-   
+
 </MudLayout>
 
 <div id="blazor-error-ui">
@@ -51,4 +62,6 @@
     {
         _isDarkMode = !_isDarkMode;
     }
+
+   
 }

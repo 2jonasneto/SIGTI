@@ -1,4 +1,4 @@
-﻿@page "/setor/lista"
+﻿@page "/configuracoes/setores"
 
 
 @using Sigti.Application
@@ -43,6 +43,7 @@
     public List<LocalizacaoDTO> Localidades { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
+        Program.siteMap = "Configurações / Setores";
 
         await Loading();
     }
@@ -54,7 +55,7 @@
     async Task Adicionar()
     {
       
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<SetorAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
 
@@ -71,7 +72,7 @@
        
         var upd = new AtualizarSetorCommand(dto.Id, dto.Nome, dto.Descricao, dto.ModificadoPor, dto.LocalizacaoId);
         var parameters = new DialogParameters<SetorAtualizar> { { x => x.Setor, upd }, { l => l.Localidades, Localidades } };
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<SetorAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
 

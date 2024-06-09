@@ -1,4 +1,4 @@
-﻿@page "/acesso/lista"
+﻿@page "/seguranca/acessos"
 
 
 @using Sigti.Application
@@ -52,7 +52,8 @@
     [Parameter] public List<ControladoraDTO> Controladoras { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
-      
+        Program.siteMap = "Segurança / Digitais ";
+
 
         await Loading(); 
         if (Controladoras.Count==0)
@@ -71,7 +72,7 @@
     }
     async Task Adicionar()
     {
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<AcessoControladoraAdicionar>("Adicionar Novo", options);
         var result = await dialog.Result;
 
@@ -93,7 +94,7 @@
             { l => l.Localidades, Localidades },
             { c => c.Controladoras, Controladoras }
         };
-        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true };
+        var options = new DialogOptions { ClassBackground = "blurryWindow", FullWidth = true, DisableBackdropClick = true };
         var dialog = await DialogService.ShowAsync<AcessoControladoraAtualizar>("Atualizar", parameters, options);
         var result = await dialog.Result;
 

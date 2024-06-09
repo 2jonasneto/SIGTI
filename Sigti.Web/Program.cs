@@ -15,6 +15,7 @@ namespace Sigti.Web
 {
     public class Program
     {
+        public static string siteMap = "";
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -33,9 +34,10 @@ namespace Sigti.Web
             builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
             builder.Services.AddAuthentication(options =>
             {
+               
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
                 options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            })
+            }).AddCookie(options => options.LogoutPath = "/logout")
                .AddIdentityCookies();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -144,10 +146,10 @@ namespace Sigti.Web
 
             }
 
-            app.UseHttpsRedirection();
+           
 
             app.UseStaticFiles();
-            app.UseAntiforgery();
+           app.UseAntiforgery();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
