@@ -2,7 +2,6 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
-
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
@@ -11,7 +10,7 @@
 <PageTitle>Log in</PageTitle>
 
 
-<div class="row justify-content-center">
+<div class="row vh-100  justify-content-center align-items-center container-fluid m-0">
    
     <div class="col-md-4">
         <section>
@@ -36,7 +35,7 @@
                 <div class="checkbox mb-3">
                     <label class="form-label">
                         <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" />
-                        Remember me
+                        Mantenha-me conectado
                     </label>
                 </div>
                 <div>

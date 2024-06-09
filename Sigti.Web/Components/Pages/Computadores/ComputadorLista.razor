@@ -8,6 +8,8 @@
 @inject ISetorQueryHandler setor
 @rendermode RenderMode.InteractiveServer
 @attribute [Authorize]
+
+
 <h3>Lista de computadores</h3>
 <MudDivider />
 
@@ -65,7 +67,7 @@
     protected override async Task OnInitializedAsync()
     {
         await Loading();
-
+       
     }
 
     async Task Adicionar()

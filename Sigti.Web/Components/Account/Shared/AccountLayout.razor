@@ -1,6 +1,9 @@
 ﻿@inherits LayoutComponentBase
-@layout Sigti.Web.Components.Layout.MainLayout
 @inject NavigationManager NavigationManager
+<MudThemeProvider IsDarkMode=true />
+<MudDialogProvider />
+<MudSnackbarProvider />
+@rendermode InteractiveWebAssembly
 
 @if (HttpContext is null)
 {
@@ -8,7 +11,10 @@
 }
 else
 {
-    @Body
+    <div>
+        @Body
+    </div>
+
 }
 
 @code {

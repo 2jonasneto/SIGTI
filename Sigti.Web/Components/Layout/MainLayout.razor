@@ -1,14 +1,35 @@
 ﻿@inherits LayoutComponentBase
+<MudThemeProvider IsDarkMode=@_isDarkMode />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+
+<MudLayout>
+
+    <AuthorizeView>
+
+        <MudAppBar Color="Color.Default" Dense="true" Elevation="10">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            <MudImage Fluid="true" Src="logoSig.png" Alt="SG" Elevation="0" Width="40" />
 
 
 
-<MudLayout Style="position:absolute">
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" Edge="Edge.End" OnClick="@((e) => ThemeChange())" />
 
-    <Main2  />
-    <MudMainContent Style="margin:auto">
+        </MudAppBar>
 
-        <div style="height:100%!important" class="p-4">@Body</div>
+        <MudDrawer Elevation="10" Width="200px" Class="pt-3" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
+            <NavMenu />
+        </MudDrawer>
 
+    </AuthorizeView>
+
+    <MudMainContent >
+          <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pt-5" >
+            
+        @Body
+       </MudContainer>
     </MudMainContent>
    
 </MudLayout>
@@ -19,8 +40,13 @@
     <a class="dismiss">🗙</a>
 </div>
 @code {
+    bool _drawerOpen = true;
     bool _isDarkMode = true;
 
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
     void ThemeChange()
     {
         _isDarkMode = !_isDarkMode;
