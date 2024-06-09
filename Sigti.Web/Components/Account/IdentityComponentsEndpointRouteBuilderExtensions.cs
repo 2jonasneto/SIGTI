@@ -19,7 +19,7 @@ namespace Microsoft.AspNetCore.Routing
             ArgumentNullException.ThrowIfNull(endpoints);
 
             var accountGroup = endpoints.MapGroup("/Account");
-
+           
             accountGroup.MapPost("/PerformExternalLogin", (
                 HttpContext context,
                 [FromServices] SignInManager<ApplicationUser> signInManager,

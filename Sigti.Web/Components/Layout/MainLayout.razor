@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Sigti.Web.Components.Pages
 @inherits LayoutComponentBase
 @inject SignInManager<ApplicationUser> SignInManager
 @inject NavigationManager NavigationManager
+@inject IDialogService DialogService
 
 <MudThemeProvider IsDarkMode=@_isDarkMode />
 <MudDialogProvider />
@@ -23,7 +25,9 @@
             <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" Edge="Edge.End" OnClick="@((e) => ThemeChange())" />
             <MudMenu Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopLeft">
                 <MudMenuItem>Perfil</MudMenuItem>
-              <Main2/>
+                <MudMenuItem Target="_self" Href="/Account/Sair">Sair</MudMenuItem>
+           
+              
             </MudMenu>
         </MudAppBar>
 
@@ -63,5 +67,5 @@
         _isDarkMode = !_isDarkMode;
     }
 
-   
+    
 }
