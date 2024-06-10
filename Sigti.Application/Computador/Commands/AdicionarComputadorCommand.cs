@@ -2,6 +2,7 @@
 using Sigti.Application.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace Sigti.Application
        
         public string ModificadoPor { get; set; }
         public string HostName { get; set; }
+        [Required(ErrorMessage ="Campo obrigatório")]
         public string Processador { get; set; }
         public string Memoria { get; set; }
         public string Disco { get; set; }

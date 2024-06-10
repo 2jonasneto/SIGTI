@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Sigti.Application.Interfaces
-@inject IComputadorQueryHandler query
+@inject IComputadorQueryHandler pc
+@inject IImpressoraQueryHandler print
 <PageTitle>Dashboard</PageTitle>
 <h3>Dashboard</h3>
 <br />
@@ -25,7 +26,20 @@
         </MudCard>
     </MudItem>
     <MudItem xs="12" sm="3">
-        <MudCard Class="pa-16 ma-1" Elevation="3">
+        <MudCard Class="pa-8 ma-1" Elevation="3">
+            <MudGrid>
+                <MudItem xs="4">
+                    <MudIcon Icon="@Icons.Material.Filled.Print" Color="Color.Tertiary" Style="font-size: 4rem" />
+                </MudItem>
+
+                <MudItem xs="8">
+                    <MudText Style="vertical-align:central;" Typo="Typo.body1">Impressoras</MudText>
+                    <MudText Style="font-style:italic" Typo="Typo.h4">@prints</MudText>
+                </MudItem>
+
+
+            </MudGrid>
+
 
         </MudCard>
     </MudItem>
@@ -43,8 +57,10 @@
 
 @code{
     private int pcs;
+    private int prints;
     protected override async Task OnInitializedAsync()
     {
-        pcs = await query.GetQuantidade();
+        pcs = await pc.GetQuantidade();
+        prints = await print.GetQuantidade();
     }
 }

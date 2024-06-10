@@ -13,5 +13,6 @@ namespace Sigti.Application.Interfaces
     {
         Task<IEnumerable<ImpressoraDTO>> ListaImpressoras();
         Task<IEnumerable<ListaImpressoraGridDTO>> GridImpressoras();
+        Task<int> GetQuantidade();
     }
 }

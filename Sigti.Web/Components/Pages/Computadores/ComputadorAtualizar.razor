@@ -2,6 +2,7 @@
 @using Sigti.Application.Base
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
+@using Sigti.Core.Dictionaries
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AtualizarComputadorCommand> Handler
 @inject ILocalizacaoQueryHandler local
@@ -41,17 +42,41 @@
                         }
                     </MudSelect>
                 </MudItem>
-                <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Processador" Label="Processador" For="@(() => Computador.Processador)" />
+                <MudItem xs="12" sm="4">
+                    <MudAutocomplete @bind-Value="@Computador.Processador" Immediate="true" ResetValueOnEmptyText="true" Required="true" MaxItems=20
+                                     Label="Processador" For="@(() => Computador.Processador)" SearchFunc="@SearchProcessadorAsync" CoerceValue="false" />
+
+
                 </MudItem>
 
-                <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Memoria" Label="Memória" For="@(() => Computador.Memoria)" />
+                <MudItem xs="12" sm="4">
+                    <MudSelect @bind-Value="@Computador.Memoria" Required="true"
+                               Label="Memória" For="@(() => Computador.Memoria)">
+                        @foreach (var item in Lists.Memories)
+                        {
+                            <MudSelectItem Value=@item />
+
+                        }
+
+                    </MudSelect>
+
                 </MudItem>
 
-                <MudItem xs="4">
-                    <MudTextField @bind-Value="@Computador.Disco" Label="Discos" For="@(() => Computador.Disco)" />
+                <MudItem xs="12" sm="4">
+                    <MudSelect @bind-Value="@Computador.Disco" @bind-SelectedValues="options" MultiSelection="true" Required="true"
+                               Label="Discos" For="@(() => Computador.Disco)">
+
+                        @foreach (var item in Lists.Disks)
+                        {
+                            <MudSelectItem Value=@item />
+
+                        }
+
+
+                    </MudSelect>
+
                 </MudItem>
+
 
                 <MudItem xs="4">
                     <MudTextField Mask="@ipv4Mask" @bind-Value="@Computador.Ip" Label="Ip" For="@(() => Computador.Ip)" />
@@ -93,15 +118,23 @@
     EditForm form;
     public IMask ipv4Mask = RegexMask.IPv4();
 
+
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public AtualizarComputadorCommand Computador { get; set; } = new();
     [Parameter] public List<LocalizacaoDTO> Localidades { get; set; } = new();
     [Parameter] public List<SetorDTO> Setores { get; set; } = new();
+    private IEnumerable<string> options { get; set; } = new HashSet<string>();
 
     protected override async Task OnInitializedAsync()
     {
-
+        var discos = Computador.Disco.Split(',');
+        var hashset = new HashSet<string>();
+        foreach (var item in discos)
+        {
+            hashset.Add(item.Trim());
+        }
+        options = hashset;
         //  Setores = (await setor.ListaSetores()).ToList();
         //Localidades = (await local.ListaLocalizacoes()).ToList();
     }
@@ -138,5 +171,18 @@
             }
 
         }
+    }
+    private async Task<IEnumerable<string>> SearchProcessadorAsync(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return Lists.Processors;
+        }
+
+        return Lists.Processors.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 }

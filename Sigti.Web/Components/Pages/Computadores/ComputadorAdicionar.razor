@@ -2,6 +2,7 @@
 @using Sigti.Application.DTO
 @using Sigti.Application.Interfaces
 @using Sigti.Application.Base
+@using Sigti.Core.Dictionaries
 @inject ISnackbar Snackbar
 @inject ICommandHandler<AdicionarComputadorCommand> Handler
 @inject ISetorQueryHandler setor
@@ -42,15 +43,38 @@
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="12" sm="4">
-                    <MudTextField @bind-Value="@Computador.Processador" Label="Processador" For="@(() => Computador.Processador)" />
+                    <MudAutocomplete @bind-Value="@Computador.Processador" Immediate="true" ResetValueOnEmptyText="true" Required="true" MaxItems=20
+                                     Label="Processador" For="@(() => Computador.Processador)" SearchFunc="@SearchProcessadorAsync" CoerceValue="false" />
+
+
                 </MudItem>
 
                 <MudItem xs="12" sm="4">
-                    <MudTextField @bind-Value="@Computador.Memoria" Label="Memória" For="@(() => Computador.Memoria)" />
+                    <MudSelect @bind-Value="@Computador.Memoria" Required="true"
+                               Label="Memória" For="@(() => Computador.Memoria)">
+                        @foreach (var item in Lists.Memories)
+                        {
+                            <MudSelectItem Value=@item/>
+
+                        }
+
+                    </MudSelect>
+
                 </MudItem>
 
                 <MudItem xs="12" sm="4">
-                    <MudTextField @bind-Value="@Computador.Disco" Label="Discos" For="@(() => Computador.Disco)" />
+                    <MudSelect @bind-Value="@Computador.Disco" MultiSelection="true" Required="true"
+                               Label="Discos" For="@(() => Computador.Disco)" >
+
+                        @foreach (var item in Lists.Disks)
+                        {
+                            <MudSelectItem Value=@item />
+
+                        }
+
+                           
+                           </MudSelect>
+
                 </MudItem>
 
                 <MudItem xs="12" sm="4">
@@ -62,7 +86,7 @@
 
                 </MudItem>
 
-              
+
 
                 <MudItem xs="12" sm="6">
                     <MudTextField @bind-Value="@Computador.SistemaOperacional" Label="Sistema" For="@(() => Computador.SistemaOperacional)" />
@@ -83,8 +107,8 @@
 
     </DialogContent>
     <DialogActions>
-        <MudButton   Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
-        <MudButton  OnClick="Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Tertiary" OnClick="Salvar">Gravar</MudButton>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -108,6 +132,7 @@
 
     private async Task Salvar()
     {
+
         if (form.EditContext.Validate())
         {
             Computador.ModificadoPor = "SYSTEM";
@@ -132,7 +157,22 @@
             }
 
         }
-      
+
     }
-  
+    private async Task<IEnumerable<string>> SearchProcessadorAsync(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return Lists.Processors;
+        }
+
+        return Lists.Processors.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+    
+
+
 }

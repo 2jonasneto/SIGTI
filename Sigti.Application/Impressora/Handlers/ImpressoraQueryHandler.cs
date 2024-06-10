@@ -66,7 +66,14 @@ namespace Sigti.Application.Handlers
 
         }
 
+        public async Task<int> GetQuantidade()
+        {
 
+            var d = await _data.Impressoras.GetQuantity();
+
+            return d;
+
+        }
 
 
 
