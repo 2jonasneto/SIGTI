@@ -76,18 +76,28 @@ textarea.mud-input-slot {
     color: #258cfb
 }
 
-#equips button.mud-nav-link svg {
-    color: #258cfb !important
-}
+    #equips button.mud-nav-link svg {
+        color: #258cfb !important
+    }
+
 #segs button.mud-nav-link {
     color: #26b050
 }
 
-#segs button.mud-nav-link svg {
-   color: #26b050 !important
+    #segs button.mud-nav-link svg {
+        color: #26b050 !important
+    }
+
+#manuts button.mud-nav-link {
+    color: #73329b
 }
+
+    #manuts button.mud-nav-link svg {
+        color: #73329b !important
+    }
+
 #configs button.mud-nav-link {
-    color: #c49703
+    color: #c49703 !important
 }
 
     #configs button.mud-nav-link svg {

@@ -31,7 +31,7 @@
             </MudMenu>
         </MudAppBar>
 
-        <MudDrawer Elevation="10" Width="200px" Class="pt-3" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
+        <MudDrawer Elevation="10" Class="pt-3" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
             <NavMenu />
         </MudDrawer>
 
@@ -56,7 +56,7 @@
 </div>
 @code {
     bool _drawerOpen = true;
-    bool _isDarkMode = true;
+    bool _isDarkMode = false;
 
     void DrawerToggle()
     {

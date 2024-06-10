@@ -18,7 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SigtiContext>(options => options
 .UseSqlServer(builder.Configuration.GetConnectionString("strcon")));
-builder.Services.AddAutoMapper(typeof(Sigti.Application.Base.DTOMapping));
+builder.Services.AddAutoMapper(typeof(DTOMapping));
 builder.Services.AddScoped <IComputadorQueryHandler, ComputadorQueryHandler>();    
 builder.Services.AddScoped <ICommandHandler<AdicionarComputadorCommand>, ComputadorCommandHandler>();    
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();    
