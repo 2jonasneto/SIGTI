@@ -44,7 +44,7 @@ namespace Sigti.Application.Handlers
                 if (!await _data.Save())
                 {
                    await _data.Rollback();
-                    AddNotifications(_data.Computadores.GetNotifications());
+                    AddNotifications(_data.GetNotifications());
                     return new GenericCommandResult(false, CommandMessages.InsertError, Notifications);
                 }
                 if (!await _data.Commit())

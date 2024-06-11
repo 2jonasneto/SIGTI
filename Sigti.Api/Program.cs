@@ -52,10 +52,14 @@ app.MapGet("v2/Computadores", ([FromServices] IComputadorQueryHandler query) =>
 
 app.MapPost("v1/Computadores", async ([FromServices] ICommandHandler<AdicionarComputadorCommand> cmd) =>
 {
-    var pc = new AdicionarComputadorCommand("TESTE", "INTEL", "4", "256", "10.0.0.1", "123456789", "WWW", "eu", "12334", "indows", "eu",Guid.Parse("ec69e422-fb19-4aa4-a50e-3e75fd75fca0"), Guid.Parse("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), "vamo ver");
-  var result= await cmd.Execute(pc);
-    return ((GenericCommandResult)result).Message;
-    
+    for (int i = 1; i < 25; i++)
+    {
+        var pc = new AdicionarComputadorCommand($"FIN-{i}", "Intel Core i5-7267U @ 3.10GHz".ToUpper(), "16 GB", "SSD 240 GB", $"192.168.0.{i}", "123456789", "FINANCEIRO", "User"+i,$"{i*10}", "WINDOWS 10 PRO", "SYSTEM", Guid.Parse("7990de56-a99f-430e-b3bf-3ecddc8fe038"), Guid.Parse("dc3d00ff-e610-4e9c-a333-05bf70aa6c14"), " ");
+        var result = await cmd.Execute(pc);
+       
+    }
+    return "";
+
 })
 .WithName("PostComputadores")
 .WithOpenApi();
